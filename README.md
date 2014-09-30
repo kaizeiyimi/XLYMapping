@@ -1,30 +1,29 @@
-this Doc will show how to use XLYMapping system.
+XLYMapping system.
 ======
 
 XLYMapping is designed to map JSON into local object.
 the destination object can be object which inherited from NSObject or managedObject.
 
 more details are shown below in the demo codes.
-______
 
-normal class mapping
-------
-## 'People' and 'Child' class defination
-//defination of People class
+#normal class mapping
+
+###'People' and 'Child' class defination
+    //defination of People class
     @interface People : NSObject
     @property (nonatomic, copy) NSString *name;
     @property (nonatomic, assign) double identity;
     @property (nonatomic, strong) NSMutableSet *kids;
     @end
 
-//defination of Child class
+    //defination of Child class
     @interface Child : NSObject
     @property (nonatomic, copy) NSString *name;
     @property (nonatomic, assign) BOOL isMale;
     @end
 
-## JSON example1
-//this is a example. our JSON is:
+###JSON example1
+    //this is a example. our JSON is:
     {"people_name":"kaizei",
     "more":{"id":123.45},
     "children":[
@@ -33,7 +32,7 @@ normal class mapping
         ]
     }
 
-## setup normal object mapping
+###setup normal object mapping
     //setup people mapping.
     //name -> name, more.id -> identity.
     XLYObjectMapping *peopleMapping = [XLYObjectMapping mappingForClass:People.class];
@@ -68,10 +67,9 @@ normal class mapping
     People *people = [peopleMapping performSyncMappingWithJSONObject:dict error:&error];
 
 
-second example about managedObject mapping
-------
+#second example about managedObject mapping
 
-## managed object 'Person' and 'Music' defination
+###managed object 'Person' and 'Music' defination
 
     @interface Person : NSManagedObject
     @property (nonatomic, retain) NSString * name;
@@ -84,7 +82,7 @@ second example about managedObject mapping
     @property (nonatomic, retain) Person *person;
     @end
 
-## JSON example2
+###JSON example2
     //this time the JSON is:
     { "artist_name": "kaizei",
       "musics":[
@@ -92,7 +90,7 @@ second example about managedObject mapping
         {"music_name": "huolongguo", "create_date": "2014-9-29"}]
     }
 
-## setup managed object mapping
+###setup managed object mapping
     //setup Person mapping. set the name to be the primary key. we can set more than one.
     XLYManagedObjectMapping *personMapping = [XLYManagedObjectMapping mappingForClass:Person.class
                                                                            entityName:@"Person"
