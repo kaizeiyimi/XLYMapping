@@ -6,9 +6,19 @@ the destination object can be object which inherited from NSObject or managedObj
 
 more details are shown below in the demo codes.
 
+NOTICE: the mapping process is as follow:
+------
+1. will map. a chance to modify the JSON.
+2. dynamic map. achange to give another mapping.
+3. create a destination object. if failed then cancel the mapping.
+4. transform property. a construction block can replace the default transform.
+5. validate transformed value. if failed then cancel the mapping.
+
 #normal class mapping
 
 ###'People' and 'Child' class defination
+
+```objective-c
     //defination of People class
     @interface People : NSObject
     @property (nonatomic, copy) NSString *name;
@@ -21,6 +31,7 @@ more details are shown below in the demo codes.
     @property (nonatomic, copy) NSString *name;
     @property (nonatomic, assign) BOOL isMale;
     @end
+```
 
 ###JSON example1
     //this is a example. our JSON is:
@@ -33,6 +44,7 @@ more details are shown below in the demo codes.
     }
 
 ###setup normal object mapping
+```objective-c
     //setup people mapping.
     //name -> name, more.id -> identity.
     XLYObjectMapping *peopleMapping = [XLYObjectMapping mappingForClass:People.class];
@@ -65,12 +77,13 @@ more details are shown below in the demo codes.
 
     //this example is tested on iPhone 5s. it takes less than 0.8s to perform 10000 times.
     People *people = [peopleMapping performSyncMappingWithJSONObject:dict error:&error];
-
+```
 
 #second example about managedObject mapping
 
 ###managed object 'Person' and 'Music' defination
 
+```objective-c
     @interface Person : NSManagedObject
     @property (nonatomic, retain) NSString * name;
     @property (nonatomic, retain) NSSet *musics;
@@ -81,6 +94,7 @@ more details are shown below in the demo codes.
     @property (nonatomic, retain) NSDate * createDate;
     @property (nonatomic, retain) Person *person;
     @end
+```
 
 ###JSON example2
     //this time the JSON is:
@@ -91,6 +105,8 @@ more details are shown below in the demo codes.
     }
 
 ###setup managed object mapping
+
+```objective-c
     //setup Person mapping. set the name to be the primary key. we can set more than one.
     XLYManagedObjectMapping *personMapping = [XLYManagedObjectMapping mappingForClass:Person.class
                                                                            entityName:@"Person"
@@ -116,3 +132,20 @@ more details are shown below in the demo codes.
         //do anything your want.
         //NOTICE:no matter you perform mapping async or sync, it's always back to the context queue you give to the mapping.
     }];
+```
+
+dynamic mapping
+______
+
+###you can perform dynamic mapping if you need.
+```objective-c
+    //here we reuse the people mapping and child mapping.
+    XLYObjectMapping *theMapping = [XLYObjectMapping mappingForClass:nil];
+
+    theMapping.dynamicMappingBlock = ^XLYObjectMapping *(id JSONObject) {
+        if (JSONObject[@"child_name"]) {
+            return childMapping;
+        }
+        return peopleMapping;
+    };
+```

@@ -23,6 +23,7 @@
 @interface XLYObjectMapping : NSObject
 
 @property (nonatomic, copy) id(^willMapBlock)(id JSONObject);
+@property (nonatomic, copy) XLYObjectMapping *(^dynamicMappingBlock)(id JSONObject);
 
 + (instancetype)mappingForClass:(Class)objectClass;
 

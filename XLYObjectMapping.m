@@ -7,9 +7,10 @@
 //
 
 #import "XLYObjectMapping.h"
+
 #import <objc/runtime.h>
 
-static NSString * const XLYInvalidMappingDomain = @"XLYInvalidMappingDomain";
+static NSString * const kXLYInvalidMappingDomain = @"kXLYInvalidMappingDomain";
 
 #pragma mark - MapNode
 @interface XLYMapNode : NSObject
@@ -132,6 +133,13 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
         return nil;
     }
     if ([object isKindOfClass:[NSDictionary class]]) {
+        XLYObjectMapping *mapping = self;
+        if (self.dynamicMappingBlock) {
+            mapping = self.dynamicMappingBlock(object);
+        }
+        if (mapping && mapping != self) {
+            return [mapping transformForObject:object error:error];
+        }
         id resultObject = [self getRawResultObjectForJSONDict:object error:error];
         if (!resultObject) {
             return nil;
@@ -295,7 +303,7 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
             }
             if (!value) {
                 NSString *failureReason = [NSString stringWithFormat:@"the transformed value of primary key '%@' must not be nil.", node.toKey];
-                *error = [NSError errorWithDomain:XLYInvalidMappingDomain code:-2 userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
+                *error = [NSError errorWithDomain:kXLYInvalidMappingDomain code:-2 userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
                 return nil;
             }
             predicateFragment[node.toKey] = value;
@@ -303,7 +311,7 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
         }
     }
     if (self.primaryKeys.count != primaryKeyCount) {
-        *error = [NSError errorWithDomain:XLYInvalidMappingDomain
+        *error = [NSError errorWithDomain:kXLYInvalidMappingDomain
                                      code:-2
                                  userInfo:@{NSLocalizedFailureReasonErrorKey:@"all specified primary keys must also be mapped."}];
         return nil;
@@ -407,7 +415,7 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
     }
     if (![transformedObject isKindOfClass:NSClassFromString(type)] && error) {
         NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. object:%@, objectClass:%@, destinationType:%@", originTransformedObject, NSStringFromClass([transformedObject class]), type];
-        *error = [NSError errorWithDomain:XLYInvalidMappingDomain
+        *error = [NSError errorWithDomain:kXLYInvalidMappingDomain
                                      code:-1
                                  userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
     }
