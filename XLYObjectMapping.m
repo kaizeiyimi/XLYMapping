@@ -144,14 +144,18 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
         if (!resultObject) {
             return nil;
         }
+        BOOL hasSetValidValue = NO;
         for (XLYMapNode *node in self.mappingConstraints.allValues) {
             id value = [node transformForObject:[object valueForKeyPath:node.fromKeyPath] error:error];
             if (*error) {
                 return nil;
             }
-            [resultObject setValue:value forKey:node.toKey];
+            if (value) {
+                [resultObject setValue:value forKey:node.toKey];
+                hasSetValidValue = YES;
+            }
         }
-        return resultObject;
+        return hasSetValidValue ? resultObject : nil;
     } else if ([object isKindOfClass:[NSArray class]]) {
         NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:[object count]];
         for (id item in object) {
