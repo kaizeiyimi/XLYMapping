@@ -175,7 +175,11 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
 
 - (id)getRawResultObjectForJSONDict:(NSDictionary *)dict error:(NSError *__autoreleasing *)error
 {
-    return [self.objectClass new];
+    id object = [self.objectClass new];
+    if ([object respondsToSelector:@selector(mutableCopyWithZone:)]) {
+        object = [object mutableCopy];
+    }
+    return object;
 }
 
 @end
@@ -362,6 +366,9 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
 #pragma mark - tool functions
 static NSString * XLY_propertyTypeStringOfProperty(objc_property_t property)
 {
+    if (!property) {
+        return nil;
+    }
     char *attr = property_copyAttributeValue(property, "T");
     NSString *typeString = [NSString stringWithCString:attr encoding:NSUTF8StringEncoding];
     if ([typeString hasPrefix:@"@"]) {  //格式为@\xxx\,去掉前后的不需要的字符
@@ -382,6 +389,9 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
 {
     if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
         return nil;
+    }
+    if (!type) {
+        return transformedObject;
     }
     static NSSet *numberTypeSet;
     static NSNumberFormatter *numberFormatter;
