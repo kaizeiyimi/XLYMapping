@@ -134,8 +134,9 @@ NOTICE: the mapping process is as follow:
     }];
 ```
 
+
 dynamic mapping
-______
+======
 
 ###you can perform dynamic mapping if you need.
 ```objective-c
@@ -149,3 +150,14 @@ ______
         return peopleMapping;
     };
 ```
+
+
+support for swift
+======
+
+if you want to use this mapping system in swift. you must:
+1. make your class inherit from NSObject, and support calling 'init()' method.
+2. make every property Non-Optional and give every property a default value.
+
+because our system uses KVC，but KVC in swift is not supported as well as in Objective-C.
+you cannot use 'setValueForKey' for optional type.
