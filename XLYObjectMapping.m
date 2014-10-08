@@ -19,14 +19,14 @@ static NSString * const kXLYInvalidMappingDomain = @"kXLYInvalidMappingDomain";
 @property (nonatomic, copy) NSString *toKey;
 @property (nonatomic, strong) XLYObjectMapping *mapping;
 @property (nonatomic, copy) id(^construction)(id);
-@property (nonatomic, copy) NSString *type;
+@property (nonatomic, copy) Class type;
 
 - (id)transformForObject:(id)object error:(NSError **)error;
 
 @end
 
-static NSString * XLY_propertyTypeStringOfClass(Class theClass, NSString *propertyName);
-static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSError **error);
+static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
+static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError **error);
 
 #pragma mark - XLYObjectMapping
 @interface XLYObjectMapping ()
@@ -60,7 +60,7 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
     } else {
         node.construction = construction;
     }
-    node.type = XLY_propertyTypeStringOfClass(self.objectClass, node.toKey);
+    node.type = XLY_propertyTypeOfClass(self.objectClass, node.toKey);
     return node;
 }
 
@@ -364,62 +364,67 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
 @end
 
 #pragma mark - tool functions
-static NSString * XLY_propertyTypeStringOfProperty(objc_property_t property)
+static Class XLY_propertyTypeOfProperty(objc_property_t property)
 {
-    char *attr = property_copyAttributeValue(property, "T");
-    NSString *typeString = [NSString stringWithCString:attr encoding:NSUTF8StringEncoding];
-    if ([typeString hasPrefix:@"@"]) {  //格式为@\xxx\,去掉前后的不需要的字符
-        typeString = [typeString substringWithRange:NSMakeRange(2, typeString.length - 3)];
-    }
-    free(attr);
-    return typeString;
-}
-
-static NSString * XLY_propertyTypeStringOfClass(Class theClass, NSString *propertyName)
-{
-    objc_property_t property = class_getProperty(theClass, propertyName.UTF8String);
-    if ((theClass == [NSDictionary class] || theClass == [NSMutableDictionary class]) && !property) {
-        return nil;
-    }
-    NSString *typeString = XLY_propertyTypeStringOfProperty(property);
-    return typeString;
-}
-
-static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSError *__autoreleasing *error)
-{
-    if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
-        return nil;
-    }
-    if (!type) {
-        return transformedObject;
-    }
+    Class propertyClass = nil;
     static NSSet *numberTypeSet;
-    static NSNumberFormatter *numberFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         numberTypeSet = [NSSet setWithObjects:@"NSNumber",@"c",@"i",@"s",@"l",@"q",@"C",@"I",@"S",@"L",@"Q",@"f",@"d",@"b",@"B",nil];
+    });
+    char *attr = property_copyAttributeValue(property, "T");
+    NSString *typeString = [NSString stringWithCString:attr encoding:NSUTF8StringEncoding];
+    free(attr);
+    if ([typeString hasPrefix:@"@"]) { //oc中格式为@\xxx\,去掉前后的不需要的字符。swift中为@，保持NSObject
+        if (typeString.length > 3) {
+            typeString = [typeString substringWithRange:NSMakeRange(2, typeString.length - 3)];
+            propertyClass = NSClassFromString(typeString);
+            propertyClass = propertyClass ? propertyClass : [NSObject class];
+        } else {
+           propertyClass = [NSObject class];
+        }
+    } else if ([numberTypeSet containsObject:typeString]) {
+        propertyClass = [NSNumber class];
+    }
+    return propertyClass;
+}
+
+static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName)
+{
+    objc_property_t property = class_getProperty(theClass, propertyName.UTF8String);
+    if ((theClass == [NSDictionary class] || theClass == [NSMutableDictionary class]) && !property) {
+        return [NSObject class];
+    }
+    return XLY_propertyTypeOfProperty(property);
+}
+
+static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError *__autoreleasing *error)
+{
+    //将json中的null也当做没有值处理，将导致不设置该值
+    if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
+    static NSNumberFormatter *numberFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         numberFormatter = [NSNumberFormatter new];
     });
     id originTransformedObject = transformedObject;
-    if ([numberTypeSet containsObject:type]) {   //number
-        type = NSStringFromClass(NSNumber.class);
+    if (type == NSNumber.class) {   //number
         if ([transformedObject isKindOfClass:[NSString class]]) {
             transformedObject = [numberFormatter numberFromString:transformedObject];
         }
-    } else if ([type isEqualToString:NSStringFromClass(NSString.class)]
-               || [type isEqualToString:NSStringFromClass(NSMutableString.class)]) {   //string
+    } else if (type == NSString.class || type == NSMutableString.class) {   //string
         if ([transformedObject isKindOfClass:[NSNumber class]]) {
             transformedObject = [transformedObject stringValue];
         }
     }
     //兼容array到set的转换
-      else if ([type isEqualToString:NSStringFromClass(NSSet.class)]
-               || [type isEqualToString:NSStringFromClass(NSMutableSet.class)]) {
+      else if (type == NSSet.class || type == NSMutableSet.class) {
           if ([transformedObject isKindOfClass:[NSArray class]]) {
             transformedObject = [NSMutableSet setWithArray:transformedObject];
         }
-    } else if ([type isEqualToString:NSStringFromClass(NSOrderedSet.class)]
-               || [type isEqualToString:NSStringFromClass(NSMutableOrderedSet.class)]) {
+    } else if (type == NSOrderedSet.class || type == NSMutableOrderedSet.class) {
         if ([transformedObject isKindOfClass:[NSArray class]]) {
             transformedObject = [[NSMutableOrderedSet alloc] initWithArray:transformedObject];
         }
@@ -427,7 +432,7 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
     if ([transformedObject respondsToSelector:@selector(mutableCopyWithZone:)]) {
         transformedObject = [transformedObject mutableCopy];
     }
-    if (![transformedObject isKindOfClass:NSClassFromString(type)] && error) {
+    if (![transformedObject isKindOfClass:type] && error) {
         NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. object:%@, objectClass:%@, destinationType:%@", originTransformedObject, NSStringFromClass([transformedObject class]), type];
         *error = [NSError errorWithDomain:kXLYInvalidMappingDomain
                                      code:-1
