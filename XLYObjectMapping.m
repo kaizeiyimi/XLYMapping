@@ -366,9 +366,6 @@ static id XLY_adjustTransformedObject(id transformedObject, NSString *type, NSEr
 #pragma mark - tool functions
 static NSString * XLY_propertyTypeStringOfProperty(objc_property_t property)
 {
-    if (!property) {
-        return nil;
-    }
     char *attr = property_copyAttributeValue(property, "T");
     NSString *typeString = [NSString stringWithCString:attr encoding:NSUTF8StringEncoding];
     if ([typeString hasPrefix:@"@"]) {  //格式为@\xxx\,去掉前后的不需要的字符
@@ -381,6 +378,9 @@ static NSString * XLY_propertyTypeStringOfProperty(objc_property_t property)
 static NSString * XLY_propertyTypeStringOfClass(Class theClass, NSString *propertyName)
 {
     objc_property_t property = class_getProperty(theClass, propertyName.UTF8String);
+    if ((theClass == [NSDictionary class] || theClass == [NSMutableDictionary class]) && !property) {
+        return nil;
+    }
     NSString *typeString = XLY_propertyTypeStringOfProperty(property);
     return typeString;
 }
