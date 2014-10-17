@@ -75,7 +75,7 @@ NOTICE: the mapping process is as follow:
                               fromKeyPath:@"children"
                                     toKey:@"kids"];
 
-    //this example is tested on iPhone 5s. it takes less than 0.8s to perform 10000 times.
+    //this example is tested on iPhone 5s. it takes less than 0.53s to perform 10,000 times.
     People *people = [peopleMapping performSyncMappingWithJSONObject:dict error:&error];
 ```
 
@@ -150,6 +150,17 @@ dynamic mapping
         return peopleMapping;
     };
 ```
+
+set default value
+======
+you can also set default value for missing values. if the system meets nil for some mapping, then the default value will be used, otherwise ignored. you can also check if the JSON is missing something using the willMapBlock, just check it, and if something missing, add some value.
+
+the way to set default value is simple:
+
+```objective-c
+    [childMapping setDefaultValueForAttributes:@{@"isMale" : @YES}];
+```
+**NOTICE**: the key in dictionary is the **toKey**.
 
 
 support for swift
