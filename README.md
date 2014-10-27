@@ -14,6 +14,8 @@ NOTICE: the mapping process is as follow:
 4. transform property. a construction block can replace the default transform.
 5. validate transformed value. if failed then cancel the mapping.
 
+the validate process is compatible for some specified types: number, string, set, orderedSet and URL. please read the code for more details.
+
 #normal class mapping
 
 ###'People' and 'Child' class defination

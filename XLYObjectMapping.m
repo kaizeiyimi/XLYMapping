@@ -442,6 +442,10 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
         if ([transformedObject isKindOfClass:[NSNumber class]]) {
             transformedObject = [transformedObject stringValue];
         }
+    } else if (type == NSURL.class) { //兼容string到URL的转换, 默认使用'URLWithString:'
+        if ([transformedObject isKindOfClass:[NSString class]]) {
+            transformedObject = [NSURL URLWithString:transformedObject];
+        }
     }
     //兼容array到set的转换
       else if (type == NSSet.class || type == NSMutableSet.class) {
@@ -461,6 +465,34 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
         *error = [NSError errorWithDomain:kXLYInvalidMappingDomain
                                      code:-1
                                  userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
+        return nil;
     }
     return transformedObject;
 }
+
+#pragma mark - debug description
+@implementation XLYMapNode (DebugDescription)
+
+- (NSString *)debugDescription
+{
+    NSMutableString *string = [[NSMutableString alloc] initWithFormat:@"['%@ -> %@', class:%@", self.fromKeyPath, self.toKey, self.type];
+    if (self.mapping) {
+        [string appendFormat:@", relationShipMapping:%@", self.mapping.objectClass];
+    }
+    if (self.defaultValue) {
+        [string appendFormat:@", default:%@", self.defaultValue];
+    }
+    [string appendString:@"]"];
+    return string;
+}
+
+@end
+
+@implementation XLYObjectMapping (DebugDescription)
+
+- (NSString *)debugDescription
+{
+    return [self.mappingConstraints.allValues debugDescription];
+}
+
+@end
