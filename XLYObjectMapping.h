@@ -46,7 +46,11 @@
 ///perform mapping asynchronously, if an error occurs then the result in callback block will be nil.
 - (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id result, NSError *error))completion;
 
-///default value. key is the toKey not to fromKeyPath. this method is mainly used for attribute and not suggested for relationship.
+/**
+ * default value. key is the toKey not to fromKeyPath. this method is mainly used for attribute and not suggested for relationship.
+ *
+ * @NOTICE the value is not copied. you may use NSString, NSNumber .etc.
+ */
 - (void)setDefaultValueForAttributes:(NSDictionary *)dict;
 
 @end

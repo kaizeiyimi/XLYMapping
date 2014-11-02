@@ -19,10 +19,9 @@ static NSString * const kXLYInvalidMappingDomain = @"kXLYInvalidMappingDomain";
 @property (nonatomic, copy) NSString *toKey;
 @property (nonatomic, strong) XLYObjectMapping *mapping;
 @property (nonatomic, copy) id(^construction)(id);
-@property (nonatomic, strong) id defaultValue;
 @property (nonatomic, copy) Class type;
 
-- (id)transformForObject:(id)object error:(NSError **)error;
+- (id)transformForObject:(id)object withDefaultValue:(id)defaultValue error:(NSError **)error;
 
 @end
 
@@ -34,6 +33,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
 
 @property (nonatomic, strong) NSMutableDictionary *mappingConstraints;
 @property (nonatomic, strong) NSMutableDictionary *mappingConstraints_toKeyVersion;
+@property (nonatomic, strong) NSMutableDictionary *defaultValues;
 @property (nonatomic, strong) Class objectClass;
 
 @end
@@ -46,6 +46,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
     mapping.objectClass = objectClass;
     mapping.mappingConstraints = [NSMutableDictionary new];
     mapping.mappingConstraints_toKeyVersion = [NSMutableDictionary new];
+    mapping.defaultValues = [NSMutableDictionary new];
     return mapping;
 }
 
@@ -100,19 +101,15 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
 
 - (void)addMappingNode:(XLYMapNode *)node
 {
+    NSAssert(!self.mappingConstraints[node.fromKeyPath], @"'%@' of class '%@' cannot map more than twice.", node.fromKeyPath, self.objectClass);
+    NSAssert(!self.mappingConstraints_toKeyVersion[node.toKey], @"'%@' of class '%@' cannot be mapped more than twice.", node.toKey, self.objectClass);
     self.mappingConstraints[node.fromKeyPath] = node;
     self.mappingConstraints_toKeyVersion[node.toKey] = node;
 }
 
 - (void)setDefaultValueForAttributes:(NSDictionary *)dict
 {
-    for (NSString *key in dict.allKeys) {
-        id value = dict[key];
-        XLYMapNode *mapNode = self.mappingConstraints_toKeyVersion[key];
-        if ([[value class] isSubclassOfClass:mapNode.type]) {
-            mapNode.defaultValue = value;
-        }
-    }
+    [self.defaultValues setValuesForKeysWithDictionary:dict];
 }
 
 #pragma mark
@@ -166,7 +163,9 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
         }
         BOOL hasSetValidValue = NO;
         for (XLYMapNode *node in self.mappingConstraints.allValues) {
-            id value = [node transformForObject:[object valueForKeyPath:node.fromKeyPath] error:error];
+            id value = [node transformForObject:[object valueForKeyPath:node.fromKeyPath]
+                               withDefaultValue:self.defaultValues[node.toKey]
+                                          error:error];
             if (*error) {
                 return nil;
             }
@@ -252,6 +251,18 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
                                                   object:self.context.parentContext];
 }
 
+- (void)setDefaultValueForAttributes:(NSDictionary *)dict
+{
+    //delete default values for primary keys. primary keys cannot have default values.
+    NSMutableDictionary *defaultValues = [dict mutableCopy];
+    for (NSString *key in [dict.allKeys mutableCopy]) {
+        if ([self.primaryKeys containsObject:key]) {
+            [defaultValues removeObjectForKey:key];
+        }
+    }
+    [super setDefaultValueForAttributes:defaultValues];
+}
+
 - (void)addRelationShipMapping:(XLYObjectMapping *)mapping fromKeyPath:(NSString *)fromKeyPath toKey:(NSString *)toKey
 {
     if (![mapping isKindOfClass:[XLYManagedObjectMapping class]]) {
@@ -325,7 +336,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
     NSMutableDictionary *predicateFragment = [NSMutableDictionary dictionary];
     for (XLYMapNode *node in self.mappingConstraints.allValues) {
         if ([self.primaryKeys containsObject:node.toKey]) {
-            id value = [node transformForObject:[dict valueForKey:node.fromKeyPath] error:error];
+            id value = [node transformForObject:[dict valueForKey:node.fromKeyPath] withDefaultValue:nil error:error];
             if (*error) {
                 return nil;
             }
@@ -367,11 +378,11 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
 #pragma mark - XLYMapNode implementation
 @implementation XLYMapNode
 
-- (id)transformForObject:(id)object error:(NSError * __autoreleasing *)error
+- (id)transformForObject:(id)object withDefaultValue:(id)defaultValue error:(NSError **)error;
 {
     id resultObject = nil;
     if (!object || [object isKindOfClass:[NSNull class]]) {
-        resultObject = self.defaultValue;
+        resultObject = defaultValue;
     } else {
         if (self.mapping) {
             resultObject = [self.mapping transformForObject:object error:error];
@@ -478,9 +489,6 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
     NSMutableString *string = [[NSMutableString alloc] initWithFormat:@"['%@ -> %@', class:%@", self.fromKeyPath, self.toKey, self.type];
     if (self.mapping) {
         [string appendFormat:@", relationShipMapping:%@", self.mapping.objectClass];
-    }
-    if (self.defaultValue) {
-        [string appendFormat:@", default:%@", self.defaultValue];
     }
     [string appendString:@"]"];
     return string;
