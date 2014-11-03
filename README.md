@@ -77,7 +77,7 @@ the validate process is compatible for some specified types: number, string, set
                               fromKeyPath:@"children"
                                     toKey:@"kids"];
 
-    //this example is tested on iPhone 5s. it takes less than 0.53s to perform 10,000 times.
+    //this example is tested on iPhone 5s iOS8.1. it takes about 0.63s to perform 10,000 times.
     People *people = [peopleMapping performSyncMappingWithJSONObject:dict error:&error];
 ```
 

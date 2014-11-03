@@ -76,6 +76,7 @@
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"identity" ascending:YES]];
     NSArray *result = [self.context executeFetchRequest:request error:nil];
     self.scores = result;
+    NSLog(@"%@", self.scores);
     [self.tableView reloadData];
 }
 
