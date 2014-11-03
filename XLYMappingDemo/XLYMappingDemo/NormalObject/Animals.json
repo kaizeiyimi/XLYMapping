@@ -1,0 +1,19 @@
+{"dogs":[
+	{"name":"DogA",
+	 "height":30,
+	 "link":"http://link.to.DogA"
+    },
+	{"name":"DogB",
+	 "height":35,
+	 "link":"http://link.to.DogB"
+    }],
+ "cats":[
+ 	{"name":"CatC",
+	 "height":24,
+	 "eye color":"70,70,70,1"
+    },
+	{"name":"CatD",
+	 "height":28,
+	 "eye color":"0,0,255,1"
+    }]
+}
