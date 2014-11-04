@@ -13,8 +13,9 @@
 + (XLYObjectMapping *)defaultMapping
 {
     XLYObjectMapping *mapping = [XLYObjectMapping mappingForClass:self.class];
-    [mapping addAttributeMappingFromArray:@[@"name", @"height"]];
+//    [mapping addAttributeMappingFromArray:@[@"name", @"height"]];
     [mapping addAttributeMappingFromDict:@{@"link":@"aboutLink"}];
+    mapping.enablesAutoMap = YES;
     return mapping;
 }
 

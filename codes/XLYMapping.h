@@ -27,6 +27,8 @@
 
 @property (nonatomic, strong) Class objectClass;
 
+@property (nonatomic, assign) BOOL enablesAutoMap;
+
 - (instancetype)init NS_REQUIRES_SUPER;
 
 #pragma mark methods you should only use

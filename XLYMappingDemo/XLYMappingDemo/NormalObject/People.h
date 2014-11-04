@@ -12,6 +12,6 @@
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) double identity;
-@property (nonatomic, strong) NSMutableSet *kids;
+@property (nonatomic, strong) NSMutableSet *children;
 
 @end

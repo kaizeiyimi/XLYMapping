@@ -40,7 +40,12 @@
         [JSONObject removeObjectForKey:@"people_name"];
         return JSONObject;
     };
-    [peopleMapping addAttributeMappingFromArray:@[@"name"]];
+    
+    //the enablesAutoMap tells the mapping system try to map every fromKey to the toKey with same string value.
+    //for example, from is 'name', to is 'name' too, so you can just make 'anablesAutoMap' as YES. when perform mapping,
+    // the mapping system will try to add mapping constraints that you didn't add before.
+    peopleMapping.enablesAutoMap = YES;
+//    [peopleMapping addAttributeMappingFromArray:@[@"name"]];
     [peopleMapping addAttributeMappingFromDict:@{@"more.id":@"identity"}];
     //setup child mapping.
     //name -> name, isMale -> isBoy.
@@ -57,16 +62,16 @@
     //add a relationship mapping from children to kids.
     [peopleMapping addRelationShipMapping:childMapping
                               fromKeyPath:@"children"
-                                    toKey:@"kids"];
-    
-    //this example is tested on iPhone 5s. it takes less than 0.53s to perform 10,000 times.
+                                    toKey:@"children"];
+
+    //this example is tested on iPhone 5s. it takes about 0.73s to perform 10,000 times.
     NSDate *date = [NSDate date];
     People *people;
     for (int i = 0; i < 10000; ++i) {
         people = [peopleMapping performSyncMappingWithJSONObject:JSONObject error:nil];
     }
     NSLog(@"cost time:%f", [[NSDate date] timeIntervalSinceDate:date]);
-    NSLog(@"%@", people);
+    NSLog(@"%@", people.children);
 }
 
 - (IBAction)transformButton2Clicked:(id)sender

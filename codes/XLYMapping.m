@@ -112,6 +112,48 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
     self.mappingConstraints_toKeyVersion[node.toKey] = node;
 }
 
+- (void)fullfilMappingConstraintsWithJSONDict:(NSDictionary *)JSONDict
+{
+    NSMutableArray *keys = [JSONDict.allKeys mutableCopy];
+    [keys removeObjectsInArray:self.mappingConstraints.allKeys];
+    NSMutableArray *validKeys = [NSMutableArray arrayWithCapacity:keys.count];
+    for (NSString *key in keys) {
+        if (XLY_propertyTypeOfClass(self.objectClass, key)) {
+            [validKeys addObject:key];
+        }
+    }
+    if (validKeys.count) {
+         [self addAttributeMappingFromArray:validKeys];
+    }
+}
+
+#pragma mark methods can be overrided
+- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError *__autoreleasing *)error
+{
+    NSError *localError = nil;
+    id object = [self transformForObject:JSONObject error:&localError];
+    if (localError) {
+        if (error) {
+            *error = localError;
+        }
+    }
+    return object;
+}
+
+- (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id, NSError *))completion
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *error;
+        id resultObject = [self performSyncMappingWithJSONObject:JSONObject error:&error];
+        if (completion) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(resultObject, error);
+            });
+        }
+    });
+}
+
+
 - (id)transformForObject:(id)object error:(NSError *__autoreleasing *)error
 {
     if(!object || [object isKindOfClass:[NSNull class]]) {
@@ -136,6 +178,9 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
             return nil;
         }
         BOOL hasSetValidValue = NO;
+        if (self.enablesAutoMap) {
+            [self fullfilMappingConstraintsWithJSONDict:object];
+        }
         for (XLYMapNode *node in self.mappingConstraints.allValues) {
             id value = [node transformForObjectClass:self.objectClass
                                            withValue:[object valueForKeyPath:node.fromKeyPath]
@@ -166,32 +211,6 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
     }
     NSAssert(false, @"not a valid json object.");
     return nil;
-}
-
-#pragma mark methods to be overrided
-- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError *__autoreleasing *)error
-{
-    NSError *localError = nil;
-    id object = [self transformForObject:JSONObject error:&localError];
-    if (localError) {
-        if (error) {
-            *error = localError;
-        }
-    }
-    return object;
-}
-
-- (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id, NSError *))completion
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSError *error;
-        id resultObject = [self performSyncMappingWithJSONObject:JSONObject error:&error];
-        if (completion) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(resultObject, error);
-            });
-        }
-    });
 }
 
 - (id)getRawResultObjectForJSONDict:(NSDictionary *)dict error:(NSError *__autoreleasing *)error
@@ -238,6 +257,9 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
 #pragma mark - tool functions
 static Class XLY_propertyTypeOfProperty(objc_property_t property)
 {
+    if (!property) {
+        return nil;
+    }
     Class propertyClass = nil;
     static NSSet *numberTypeSet;
     static dispatch_once_t onceToken;
