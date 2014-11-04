@@ -46,6 +46,7 @@
     // the mapping system will try to add mapping constraints that you didn't add before.
     peopleMapping.enablesAutoMap = YES;
 //    [peopleMapping addAttributeMappingFromArray:@[@"name"]];
+    
     [peopleMapping addAttributeMappingFromDict:@{@"more.id":@"identity"}];
     //setup child mapping.
     //name -> name, isMale -> isBoy.
@@ -64,7 +65,9 @@
                               fromKeyPath:@"children"
                                     toKey:@"children"];
 
-    //this example is tested on iPhone 5s. it takes about 0.73s to perform 10,000 times.
+    //this example is tested on iPhone 5s.
+    //it takes about 0.73s to perform 10,000 times when 'enableAutoMap' is YES.
+    //it takes about 0.61s to perform 10,000 times when 'enableAutoMap' is NO.
     NSDate *date = [NSDate date];
     People *people;
     for (int i = 0; i < 10000; ++i) {

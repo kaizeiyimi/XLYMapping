@@ -27,6 +27,10 @@
 
 @property (nonatomic, strong) Class objectClass;
 
+/** Default is NO. set to YES to auto map json values into the destination object.
+ *
+ * It's important to known the fact that auto map can be much slow than normal map, because the mapping system has to find out the valid keys for your object. set to NO and add mappings yourself can make the mapping process faster.
+ */
 @property (nonatomic, assign) BOOL enablesAutoMap;
 
 - (instancetype)init NS_REQUIRES_SUPER;

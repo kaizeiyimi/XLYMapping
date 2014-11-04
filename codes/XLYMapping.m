@@ -257,9 +257,6 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
 #pragma mark - tool functions
 static Class XLY_propertyTypeOfProperty(objc_property_t property)
 {
-    if (!property) {
-        return nil;
-    }
     Class propertyClass = nil;
     static NSSet *numberTypeSet;
     static dispatch_once_t onceToken;
@@ -288,6 +285,9 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName)
     objc_property_t property = class_getProperty(theClass, propertyName.UTF8String);
     if ((theClass == [NSDictionary class] || theClass == [NSMutableDictionary class]) && !property) {
         return [NSObject class];
+    }
+    if (!property) {
+        return nil;
     }
     return XLY_propertyTypeOfProperty(property);
 }
