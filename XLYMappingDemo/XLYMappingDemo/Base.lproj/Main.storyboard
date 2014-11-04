@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rTn-C5-mJi">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <scenes>
+        <!--Tab Bar Controller-->
+        <scene sceneID="XFi-RL-oam">
+            <objects>
+                <tabBarController id="rTn-C5-mJi" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="1fQ-Zu-TvF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <viewControllers>
+                        <viewController id="F0K-km-hcJ" customClass="NormalObjectViewController">
+                            <layoutGuides>
+                                <viewControllerLayoutGuide type="top" id="y5G-SL-SWa"/>
+                                <viewControllerLayoutGuide type="bottom" id="KkU-P7-nyo"/>
+                            </layoutGuides>
+                            <view key="view" contentMode="scaleToFill" id="3cg-YV-MlV">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vJV-Iq-lGa">
+                                        <rect key="frame" x="215" y="161" width="172" height="30"/>
+                                        <state key="normal" title="transform normal objects">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="transformButtonClicked:" destination="F0K-km-hcJ" eventType="touchUpInside" id="ybX-dA-AzG"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lAM-Fr-Q3d">
+                                        <rect key="frame" x="208" y="259" width="185" height="30"/>
+                                        <state key="normal" title="transform normal objects 2">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="transformButton2Clicked:" destination="F0K-km-hcJ" eventType="touchUpInside" id="Wfn-ld-uMC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="lAM-Fr-Q3d" secondAttribute="centerX" constant="-0.5" id="N9f-9Y-QP4"/>
+                                    <constraint firstAttribute="centerX" secondItem="vJV-Iq-lGa" secondAttribute="centerX" constant="-0.5" id="UNr-em-Z0S"/>
+                                    <constraint firstAttribute="centerY" secondItem="lAM-Fr-Q3d" secondAttribute="centerY" constant="26" id="ZN6-6c-7oG"/>
+                                    <constraint firstAttribute="centerY" secondItem="vJV-Iq-lGa" secondAttribute="centerY" constant="124" id="eRF-q8-o3q"/>
+                                </constraints>
+                            </view>
+                            <tabBarItem key="tabBarItem" systemItem="mostViewed" id="PoX-sK-HHp"/>
+                        </viewController>
+                        <navigationController id="zIY-p7-QTS" userLabel="NavigationController">
+                            <tabBarItem key="tabBarItem" systemItem="downloads" id="Tjn-nw-Sa8"/>
+                            <navigationBar key="navigationBar" contentMode="scaleToFill" id="9OD-c8-Twc">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </navigationBar>
+                            <viewControllers>
+                                <tableViewController title="scores" id="Qrb-HS-PCL" customClass="MangedObjectTableViewController">
+                                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="8KP-jE-OYz">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <prototypes>
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="NSW-Cd-fJl" detailTextLabel="F0X-io-BCp" style="IBUITableViewCellStyleValue2" id="ooe-t3-af6">
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ooe-t3-af6" id="I2H-OK-UyZ">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NSW-Cd-fJl">
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                            <color key="textColor" red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="F0X-io-BCp">
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                    <navigationItem key="navigationItem" title="pull to load data" id="41J-X0-bAe"/>
+                                </tableViewController>
+                            </viewControllers>
+                        </navigationController>
+                    </viewControllers>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x33-WE-GhM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-456" y="989"/>
+        </scene>
+    </scenes>
+</document>

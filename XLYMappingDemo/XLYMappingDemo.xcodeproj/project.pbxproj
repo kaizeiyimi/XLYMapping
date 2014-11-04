@@ -1,0 +1,553 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F6059FBE1A07646700F667CB /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F6059FBC1A07646700F667CB /* Model.xcdatamodeld */; };
+		F6059FC41A07660700F667CB /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = F6059FC31A07660700F667CB /* Student.m */; };
+		F6059FC61A0766C000F667CB /* Scores.json in Resources */ = {isa = PBXBuildFile; fileRef = F6059FC51A0766C000F667CB /* Scores.json */; };
+		F6059FC91A0767C900F667CB /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = F6059FC81A0767C900F667CB /* Person.m */; };
+		F6059FCC1A07691D00F667CB /* MangedObjectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6059FCB1A07691D00F667CB /* MangedObjectTableViewController.m */; };
+		F6059FCF1A07723500F667CB /* Teacher.m in Sources */ = {isa = PBXBuildFile; fileRef = F6059FCE1A07723500F667CB /* Teacher.m */; };
+		F6356AC31A07B46100BA6956 /* XLYMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = F6356AC21A07B46100BA6956 /* XLYMapping.m */; };
+		F6356AC71A07D22C00BA6956 /* People.m in Sources */ = {isa = PBXBuildFile; fileRef = F6356AC61A07D22C00BA6956 /* People.m */; };
+		F6356ACA1A07D23C00BA6956 /* Child.m in Sources */ = {isa = PBXBuildFile; fileRef = F6356AC91A07D23C00BA6956 /* Child.m */; };
+		F6356ACC1A07D28600BA6956 /* People.json in Resources */ = {isa = PBXBuildFile; fileRef = F6356ACB1A07D28600BA6956 /* People.json */; };
+		F6384ABC1A0725780023A97D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384ABB1A0725780023A97D /* main.m */; };
+		F6384ABF1A0725780023A97D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384ABE1A0725780023A97D /* AppDelegate.m */; };
+		F6384AC51A0725780023A97D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6384AC31A0725780023A97D /* Main.storyboard */; };
+		F6384AC71A0725780023A97D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6384AC61A0725780023A97D /* Images.xcassets */; };
+		F6384ACA1A0725780023A97D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6384AC81A0725780023A97D /* LaunchScreen.xib */; };
+		F6384AD61A0725780023A97D /* XLYMappingDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AD51A0725780023A97D /* XLYMappingDemoTests.m */; };
+		F6384AE21A0725E70023A97D /* XLYObjectMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AE11A0725E70023A97D /* XLYObjectMapping.m */; };
+		F6384AE71A0726D70023A97D /* NormalObjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AE61A0726D70023A97D /* NormalObjectViewController.m */; };
+		F6384AEA1A072E3C0023A97D /* Animal.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AE91A072E3C0023A97D /* Animal.m */; };
+		F6384AED1A072EA50023A97D /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AEC1A072EA50023A97D /* Dog.m */; };
+		F6384AF01A072EBA0023A97D /* Cat.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AEF1A072EBA0023A97D /* Cat.m */; };
+		F6384AF21A07341E0023A97D /* Animals.json in Resources */ = {isa = PBXBuildFile; fileRef = F6384AF11A07341E0023A97D /* Animals.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F6384AD01A0725780023A97D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F6384AAE1A0725780023A97D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F6384AB51A0725780023A97D;
+			remoteInfo = XLYMappingDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F6059FBD1A07646700F667CB /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F6059FC21A07660700F667CB /* Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
+		F6059FC31A07660700F667CB /* Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
+		F6059FC51A0766C000F667CB /* Scores.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Scores.json; sourceTree = "<group>"; };
+		F6059FC71A0767C900F667CB /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		F6059FC81A0767C900F667CB /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		F6059FCA1A07691D00F667CB /* MangedObjectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MangedObjectTableViewController.h; sourceTree = "<group>"; };
+		F6059FCB1A07691D00F667CB /* MangedObjectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MangedObjectTableViewController.m; sourceTree = "<group>"; };
+		F6059FCD1A07723500F667CB /* Teacher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Teacher.h; sourceTree = "<group>"; };
+		F6059FCE1A07723500F667CB /* Teacher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Teacher.m; sourceTree = "<group>"; };
+		F6356AC11A07B46100BA6956 /* XLYMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLYMapping.h; sourceTree = "<group>"; };
+		F6356AC21A07B46100BA6956 /* XLYMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYMapping.m; sourceTree = "<group>"; };
+		F6356AC41A07B4E000BA6956 /* XLYMappingSubclasses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XLYMappingSubclasses.h; sourceTree = "<group>"; };
+		F6356AC51A07D22C00BA6956 /* People.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = People.h; sourceTree = "<group>"; };
+		F6356AC61A07D22C00BA6956 /* People.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = People.m; sourceTree = "<group>"; };
+		F6356AC81A07D23C00BA6956 /* Child.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Child.h; sourceTree = "<group>"; };
+		F6356AC91A07D23C00BA6956 /* Child.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Child.m; sourceTree = "<group>"; };
+		F6356ACB1A07D28600BA6956 /* People.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = People.json; sourceTree = "<group>"; };
+		F6384AB61A0725780023A97D /* XLYMappingDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XLYMappingDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6384ABA1A0725780023A97D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F6384ABB1A0725780023A97D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F6384ABD1A0725780023A97D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F6384ABE1A0725780023A97D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F6384AC41A0725780023A97D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F6384AC61A0725780023A97D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F6384AC91A0725780023A97D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		F6384ACF1A0725780023A97D /* XLYMappingDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XLYMappingDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6384AD41A0725780023A97D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F6384AD51A0725780023A97D /* XLYMappingDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLYMappingDemoTests.m; sourceTree = "<group>"; };
+		F6384AE01A0725E70023A97D /* XLYObjectMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLYObjectMapping.h; sourceTree = "<group>"; };
+		F6384AE11A0725E70023A97D /* XLYObjectMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYObjectMapping.m; sourceTree = "<group>"; };
+		F6384AE51A0726D70023A97D /* NormalObjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NormalObjectViewController.h; sourceTree = "<group>"; };
+		F6384AE61A0726D70023A97D /* NormalObjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NormalObjectViewController.m; sourceTree = "<group>"; };
+		F6384AE81A072E3C0023A97D /* Animal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animal.h; sourceTree = "<group>"; };
+		F6384AE91A072E3C0023A97D /* Animal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Animal.m; sourceTree = "<group>"; };
+		F6384AEB1A072EA50023A97D /* Dog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
+		F6384AEC1A072EA50023A97D /* Dog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
+		F6384AEE1A072EBA0023A97D /* Cat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cat.h; sourceTree = "<group>"; };
+		F6384AEF1A072EBA0023A97D /* Cat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cat.m; sourceTree = "<group>"; };
+		F6384AF11A07341E0023A97D /* Animals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Animals.json; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F6384AB31A0725780023A97D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6384ACC1A0725780023A97D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F6384AAD1A0725780023A97D = {
+			isa = PBXGroup;
+			children = (
+				F6384AB81A0725780023A97D /* XLYMappingDemo */,
+				F6384AD21A0725780023A97D /* XLYMappingDemoTests */,
+				F6384AB71A0725780023A97D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F6384AB71A0725780023A97D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F6384AB61A0725780023A97D /* XLYMappingDemo.app */,
+				F6384ACF1A0725780023A97D /* XLYMappingDemoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F6384AB81A0725780023A97D /* XLYMappingDemo */ = {
+			isa = PBXGroup;
+			children = (
+				F6384ADF1A0725E70023A97D /* codes */,
+				F6384ABD1A0725780023A97D /* AppDelegate.h */,
+				F6384ABE1A0725780023A97D /* AppDelegate.m */,
+				F6384AE41A0726B60023A97D /* NormalObject */,
+				F6384AE31A0726B60023A97D /* ManagedObject */,
+				F6384AC31A0725780023A97D /* Main.storyboard */,
+				F6384AC61A0725780023A97D /* Images.xcassets */,
+				F6384AC81A0725780023A97D /* LaunchScreen.xib */,
+				F6384AB91A0725780023A97D /* Supporting Files */,
+			);
+			path = XLYMappingDemo;
+			sourceTree = "<group>";
+		};
+		F6384AB91A0725780023A97D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F6384ABA1A0725780023A97D /* Info.plist */,
+				F6384ABB1A0725780023A97D /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F6384AD21A0725780023A97D /* XLYMappingDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				F6384AD51A0725780023A97D /* XLYMappingDemoTests.m */,
+				F6384AD31A0725780023A97D /* Supporting Files */,
+			);
+			path = XLYMappingDemoTests;
+			sourceTree = "<group>";
+		};
+		F6384AD31A0725780023A97D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F6384AD41A0725780023A97D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F6384ADF1A0725E70023A97D /* codes */ = {
+			isa = PBXGroup;
+			children = (
+				F6356AC11A07B46100BA6956 /* XLYMapping.h */,
+				F6356AC21A07B46100BA6956 /* XLYMapping.m */,
+				F6356AC41A07B4E000BA6956 /* XLYMappingSubclasses.h */,
+				F6384AE01A0725E70023A97D /* XLYObjectMapping.h */,
+				F6384AE11A0725E70023A97D /* XLYObjectMapping.m */,
+			);
+			name = codes;
+			path = ../../codes;
+			sourceTree = "<group>";
+		};
+		F6384AE31A0726B60023A97D /* ManagedObject */ = {
+			isa = PBXGroup;
+			children = (
+				F6059FCA1A07691D00F667CB /* MangedObjectTableViewController.h */,
+				F6059FCB1A07691D00F667CB /* MangedObjectTableViewController.m */,
+				F6059FC51A0766C000F667CB /* Scores.json */,
+				F6059FBC1A07646700F667CB /* Model.xcdatamodeld */,
+				F6059FC71A0767C900F667CB /* Person.h */,
+				F6059FC81A0767C900F667CB /* Person.m */,
+				F6059FCD1A07723500F667CB /* Teacher.h */,
+				F6059FCE1A07723500F667CB /* Teacher.m */,
+				F6059FC21A07660700F667CB /* Student.h */,
+				F6059FC31A07660700F667CB /* Student.m */,
+			);
+			path = ManagedObject;
+			sourceTree = "<group>";
+		};
+		F6384AE41A0726B60023A97D /* NormalObject */ = {
+			isa = PBXGroup;
+			children = (
+				F6384AE51A0726D70023A97D /* NormalObjectViewController.h */,
+				F6384AE61A0726D70023A97D /* NormalObjectViewController.m */,
+				F6356ACB1A07D28600BA6956 /* People.json */,
+				F6356AC51A07D22C00BA6956 /* People.h */,
+				F6356AC61A07D22C00BA6956 /* People.m */,
+				F6356AC81A07D23C00BA6956 /* Child.h */,
+				F6356AC91A07D23C00BA6956 /* Child.m */,
+				F6384AF11A07341E0023A97D /* Animals.json */,
+				F6384AE81A072E3C0023A97D /* Animal.h */,
+				F6384AE91A072E3C0023A97D /* Animal.m */,
+				F6384AEB1A072EA50023A97D /* Dog.h */,
+				F6384AEC1A072EA50023A97D /* Dog.m */,
+				F6384AEE1A072EBA0023A97D /* Cat.h */,
+				F6384AEF1A072EBA0023A97D /* Cat.m */,
+			);
+			path = NormalObject;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F6384AB51A0725780023A97D /* XLYMappingDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F6384AD91A0725780023A97D /* Build configuration list for PBXNativeTarget "XLYMappingDemo" */;
+			buildPhases = (
+				F6384AB21A0725780023A97D /* Sources */,
+				F6384AB31A0725780023A97D /* Frameworks */,
+				F6384AB41A0725780023A97D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XLYMappingDemo;
+			productName = XLYMappingDemo;
+			productReference = F6384AB61A0725780023A97D /* XLYMappingDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F6384ACE1A0725780023A97D /* XLYMappingDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F6384ADC1A0725780023A97D /* Build configuration list for PBXNativeTarget "XLYMappingDemoTests" */;
+			buildPhases = (
+				F6384ACB1A0725780023A97D /* Sources */,
+				F6384ACC1A0725780023A97D /* Frameworks */,
+				F6384ACD1A0725780023A97D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F6384AD11A0725780023A97D /* PBXTargetDependency */,
+			);
+			name = XLYMappingDemoTests;
+			productName = XLYMappingDemoTests;
+			productReference = F6384ACF1A0725780023A97D /* XLYMappingDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F6384AAE1A0725780023A97D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = kaizei;
+				TargetAttributes = {
+					F6384AB51A0725780023A97D = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					F6384ACE1A0725780023A97D = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = F6384AB51A0725780023A97D;
+					};
+				};
+			};
+			buildConfigurationList = F6384AB11A0725780023A97D /* Build configuration list for PBXProject "XLYMappingDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F6384AAD1A0725780023A97D;
+			productRefGroup = F6384AB71A0725780023A97D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F6384AB51A0725780023A97D /* XLYMappingDemo */,
+				F6384ACE1A0725780023A97D /* XLYMappingDemoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F6384AB41A0725780023A97D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F6384AC51A0725780023A97D /* Main.storyboard in Resources */,
+				F6384AF21A07341E0023A97D /* Animals.json in Resources */,
+				F6059FC61A0766C000F667CB /* Scores.json in Resources */,
+				F6384ACA1A0725780023A97D /* LaunchScreen.xib in Resources */,
+				F6356ACC1A07D28600BA6956 /* People.json in Resources */,
+				F6384AC71A0725780023A97D /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6384ACD1A0725780023A97D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F6384AB21A0725780023A97D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F6059FCF1A07723500F667CB /* Teacher.m in Sources */,
+				F6384AED1A072EA50023A97D /* Dog.m in Sources */,
+				F6384ABF1A0725780023A97D /* AppDelegate.m in Sources */,
+				F6059FCC1A07691D00F667CB /* MangedObjectTableViewController.m in Sources */,
+				F6059FC91A0767C900F667CB /* Person.m in Sources */,
+				F6384AF01A072EBA0023A97D /* Cat.m in Sources */,
+				F6059FBE1A07646700F667CB /* Model.xcdatamodeld in Sources */,
+				F6384ABC1A0725780023A97D /* main.m in Sources */,
+				F6384AEA1A072E3C0023A97D /* Animal.m in Sources */,
+				F6356ACA1A07D23C00BA6956 /* Child.m in Sources */,
+				F6059FC41A07660700F667CB /* Student.m in Sources */,
+				F6356AC71A07D22C00BA6956 /* People.m in Sources */,
+				F6384AE71A0726D70023A97D /* NormalObjectViewController.m in Sources */,
+				F6384AE21A0725E70023A97D /* XLYObjectMapping.m in Sources */,
+				F6356AC31A07B46100BA6956 /* XLYMapping.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6384ACB1A0725780023A97D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F6384AD61A0725780023A97D /* XLYMappingDemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F6384AD11A0725780023A97D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F6384AB51A0725780023A97D /* XLYMappingDemo */;
+			targetProxy = F6384AD01A0725780023A97D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F6384AC31A0725780023A97D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F6384AC41A0725780023A97D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F6384AC81A0725780023A97D /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F6384AC91A0725780023A97D /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F6384AD71A0725780023A97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F6384AD81A0725780023A97D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F6384ADA1A0725780023A97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = XLYMappingDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F6384ADB1A0725780023A97D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = XLYMappingDemo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		F6384ADD1A0725780023A97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = XLYMappingDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/XLYMappingDemo.app/XLYMappingDemo";
+			};
+			name = Debug;
+		};
+		F6384ADE1A0725780023A97D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = XLYMappingDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/XLYMappingDemo.app/XLYMappingDemo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F6384AB11A0725780023A97D /* Build configuration list for PBXProject "XLYMappingDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6384AD71A0725780023A97D /* Debug */,
+				F6384AD81A0725780023A97D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F6384AD91A0725780023A97D /* Build configuration list for PBXNativeTarget "XLYMappingDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6384ADA1A0725780023A97D /* Debug */,
+				F6384ADB1A0725780023A97D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F6384ADC1A0725780023A97D /* Build configuration list for PBXNativeTarget "XLYMappingDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6384ADD1A0725780023A97D /* Debug */,
+				F6384ADE1A0725780023A97D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F6059FBC1A07646700F667CB /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F6059FBD1A07646700F667CB /* Model.xcdatamodel */,
+			);
+			currentVersion = F6059FBD1A07646700F667CB /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = F6384AAE1A0725780023A97D /* Project object */;
+}

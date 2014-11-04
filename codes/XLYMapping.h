@@ -1,8 +1,8 @@
 //
-//  XLYObjectMapping.h
-//  XLYMapping
+//  XLYMapping.h
+//  XLYMappingDemo
 //
-//  Created by 王凯 on 14-9-28.
+//  Created by kaizei on 14/11/3.
 //  Copyright (c) 2014年 kaizei. All rights reserved.
 //
 
@@ -18,17 +18,24 @@
  for more detail, please refer to the README.md file.
  */
 
-#import <Foundation/Foundation.h>
-@import CoreData;
+@import Foundation;
 
-#pragma mark - XLYObjectMapping
-@interface XLYObjectMapping : NSObject
+@interface XLYMapping : NSObject
 
 @property (nonatomic, copy) id(^willMapBlock)(id JSONObject);
-@property (nonatomic, copy) XLYObjectMapping *(^dynamicMappingBlock)(id JSONObject);
+@property (nonatomic, copy) XLYMapping *(^dynamicMappingBlock)(id JSONObject);
 
-+ (instancetype)mappingForClass:(Class)objectClass;
+@property (nonatomic, strong) Class objectClass;
 
+/** Default is NO. set to YES to auto map json values into the destination object.
+ *
+ * It's important to known the fact that auto map can be much slow than normal map, because the mapping system has to find out the valid keys for your object. set to NO and add mappings yourself can make the mapping process faster.
+ */
+@property (nonatomic, assign) BOOL enablesAutoMap;
+
+- (instancetype)init NS_REQUIRES_SUPER;
+
+#pragma mark methods you should only use
 ///key is the fromKeyPath, value is the toKey.
 - (void)addAttributeMappingFromDict:(NSDictionary *)dict;
 ///fromKeyPath and toKey is the same.
@@ -38,34 +45,21 @@
                         toKey:(NSString *)toKey
                  construction:(id(^)(id JSONObject))construction;
 ///add a relationShip mapping.
-- (void)addRelationShipMapping:(XLYObjectMapping *)mapping
+- (void)addRelationShipMapping:(XLYMapping *)mapping
                    fromKeyPath:(NSString *)fromKeyPath
                          toKey:(NSString *)toKey;
-///perform mapping synchronously, if an error occurs then return nil.
-- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError **)error;
-///perform mapping asynchronously, if an error occurs then the result in callback block will be nil.
-- (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id result, NSError *error))completion;
 
+#pragma mark methods you can override if needed
 /**
  * default value. key is the toKey not to fromKeyPath. this method is mainly used for attribute and not suggested for relationship.
  *
- * @NOTICE the value is not copied. you may use NSString, NSNumber .etc.
+ * the value is not copied. you may use NSString, NSNumber .etc.
  */
 - (void)setDefaultValueForAttributes:(NSDictionary *)dict;
 
-@end
-
-#pragma mark - XLYManagedObjectMapping
-@interface XLYManagedObjectMapping : XLYObjectMapping
-
-+ (instancetype)mappingForClass:(Class)objectClass
-                     entityName:(NSString *)entityName
-                    primaryKeys:(NSArray *)primaryKeys
-           managedObjectContext:(NSManagedObjectContext *)parentContext;
-
-///perform mapping synchronously, if an error occurs then return nil. the result will associated with parentContext.
+///perform mapping synchronously, if an error occurs then return nil.
 - (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError **)error;
-///perform mapping asynchronously, if an error occurs then the result in callback block will be nil. the callback is in the parentContext's queue, and the result will associated with parentContext.
+///perform mapping asynchronously, if an error occurs then the result in callback block will be nil.
 - (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id result, NSError *error))completion;
 
 @end

@@ -1,0 +1,22 @@
+[
+ {"name":"teacherA",
+  "identity":100,
+  "school name":"school X",
+  "students":[{"name":"stuA",
+               "identity":1001,
+               "score":99},
+              {"name":"stuB",
+              "identity":1002,
+              "score":97}]
+ },
+ {"name":"teacherB",
+ "identity":101,
+ "school name":"school Y",
+ "students":[{"name":"stuC",
+             "identity":1003,
+             "score":98},
+             {"name":"stuD",
+             "identity":1004,
+             "score":100}]
+ }
+]
