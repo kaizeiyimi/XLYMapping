@@ -116,6 +116,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
 {
     NSMutableArray *keys = [JSONDict.allKeys mutableCopy];
     [keys removeObjectsInArray:self.mappingConstraints.allKeys];
+    [keys removeObjectsInArray:self.mappingConstraints_toKeyVersion.allKeys];
     NSMutableArray *validKeys = [NSMutableArray arrayWithCapacity:keys.count];
     for (NSString *key in keys) {
         if (XLY_propertyTypeOfClass(self.objectClass, key)) {
