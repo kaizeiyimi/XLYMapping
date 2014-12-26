@@ -16,7 +16,7 @@ NSInteger const XLYInvalidMappingTypeMismatchErrorCode = -1;
 NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -2;
 
 static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
-static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError **error);
+static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id transformedObject, Class type, NSError *__autoreleasing *error);
 
 @interface XLYMapNode ()
 
@@ -210,7 +210,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
         }
         return resultArray.count > 0 ? resultArray : nil;
     }
-    NSAssert(false, @"not a valid json object.");
+    NSAssert(false, @"\"%@\" not a valid json object.", object);
     return nil;
 }
 
@@ -249,7 +249,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
         }
         type = self.type;
     }
-    result = XLY_adjustTransformedObject(result, type, error);
+    result = XLY_adjustTransformedObject(self.fromKeyPath, self.toKey, result, type, error);
     return result;
 }
 
@@ -293,7 +293,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName)
     return XLY_propertyTypeOfProperty(property);
 }
 
-static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError *__autoreleasing *error)
+static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id transformedObject, Class type, NSError *__autoreleasing *error)
 {
     //将json中的null也当做没有值处理，将导致不设置该值
     if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
@@ -332,7 +332,7 @@ static id XLY_adjustTransformedObject(id transformedObject, Class type, NSError 
         transformedObject = [transformedObject mutableCopy];
     }
     if (![transformedObject isKindOfClass:type] && error) {
-        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. object:%@, objectClass:%@, destinationType:%@", originTransformedObject, NSStringFromClass([transformedObject class]), type];
+        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", fromKeyPath, toKey,originTransformedObject, NSStringFromClass([transformedObject class]), type];
         *error = [NSError errorWithDomain:XLYInvalidMappingDomain
                                      code:XLYInvalidMappingTypeMismatchErrorCode
                                  userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
