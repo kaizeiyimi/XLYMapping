@@ -4,7 +4,7 @@
   "school name":"school X",
   "students":[{"name":"stuA",
                "identity":1001,
-               "score":99},
+               "score":null},
               {"name":"stuB",
               "identity":1002,
               "score":97}]

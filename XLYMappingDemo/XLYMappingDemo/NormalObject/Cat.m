@@ -29,4 +29,13 @@
     return [NSString stringWithFormat:@"CAT: name:%@, eyeColor:%@", self.name, self.eyeColor];
 }
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.name = @"cat";
+        self.height = -1;
+    }
+    return self;
+}
+
 @end

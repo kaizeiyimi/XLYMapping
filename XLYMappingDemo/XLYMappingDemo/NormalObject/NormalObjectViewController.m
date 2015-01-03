@@ -64,10 +64,6 @@
     [peopleMapping addRelationShipMapping:childMapping
                               fromKeyPath:@"children"
                                     toKey:@"children"];
-
-    //this example is tested on iPhone 5s.
-    //it takes about 0.73s to perform 10,000 times when 'enableAutoMap' is YES.
-    //it takes about 0.61s to perform 10,000 times when 'enableAutoMap' is NO.
     NSDate *date = [NSDate date];
     People *people;
     for (int i = 0; i < 10000; ++i) {
@@ -87,6 +83,9 @@
         if ([JSONObject isKindOfClass:[NSDictionary class]]) {
             NSMutableArray *array = [NSMutableArray new];
             for (NSString *key in [JSONObject allKeys]) {
+                if ([JSONObject[key] isKindOfClass:[NSNull class]]) {
+                    continue;
+                }
                 for (NSDictionary *animalInfo in JSONObject[key]) {
                     NSMutableDictionary *animal = [animalInfo mutableCopy];
                     animal[@"type"] = [key substringToIndex:key.length - 1];

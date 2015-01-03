@@ -9,7 +9,7 @@ more details are shown below in the demo codes.
 NOTICE: the mapping process is as follow:
 ------
 1. will map. a chance to modify the JSON.
-2. dynamic map. achange to give another mapping.
+2. dynamic map. a change to give another mapping.
 3. create a destination object. if failed then cancel the mapping.
 4. transform property. a construction block can replace the default transform.
 5. validate transformed value. if failed then cancel the mapping.
@@ -76,10 +76,6 @@ the validate process is compatible for some specified types: number, string, set
     [peopleMapping addRelationShipMapping:childMapping
                               fromKeyPath:@"children"
                                     toKey:@"kids"];
-
-    //this example is tested on iPhone 5s iOS8.1.
-    //it takes about 0.73s to perform 10,000 times when 'enableAutoMap' is YES.
-    //it takes about 0.61s to perform 10,000 times when 'enableAutoMap' is NO.
 
     People *people = [peopleMapping performSyncMappingWithJSONObject:dict error:&error];
 ```
