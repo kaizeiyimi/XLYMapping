@@ -166,7 +166,6 @@
             id value = [node transformForObjectClass:self.objectClass
                                            withValue:[dict valueForKey:node.fromKeyPath]
                                         defaultValue:nil
-                                        rememberType:NO
                                                error:error];
             if (*error) {
                 return nil;

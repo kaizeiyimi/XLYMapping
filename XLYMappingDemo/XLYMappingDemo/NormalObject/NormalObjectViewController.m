@@ -32,7 +32,7 @@
     //setup people mapping.
     //name -> name, more.id -> identity.
     XLYObjectMapping *peopleMapping = [XLYObjectMapping mappingForClass:People.class];
-    peopleMapping.willMapBlock = (id)^(id JSONObject) {
+    peopleMapping.willMapBlock = ^id(id JSONObject) {
         //you can adjust the JSON here for any reason.
         //you can cancel this mapping by return nil.
         JSONObject = [JSONObject mutableCopy];
@@ -73,7 +73,7 @@
     for (int i = 0; i < 10000; ++i) {
         people = [peopleMapping performSyncMappingWithJSONObject:JSONObject error:nil];
     }
-    NSLog(@"cost time:%f", [[NSDate date] timeIntervalSinceDate:date]);
+    NSLog(@"10000 times cost:%f", [[NSDate date] timeIntervalSinceDate:date]);
     NSLog(@"%@", people.children);
 }
 

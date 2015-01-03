@@ -40,11 +40,9 @@ extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
 @property (nonatomic, strong, readonly) XLYMapping *mapping;
 @property (nonatomic, copy, readonly) id(^construction)(id);
 
-///rememberType should be NO when temprory use.
 - (id)transformForObjectClass:(Class)objectClass
                     withValue:(id)value
                  defaultValue:(id)defaultValue
-                 rememberType:(BOOL)rememberType
                         error:(NSError **)error;
 
 @end

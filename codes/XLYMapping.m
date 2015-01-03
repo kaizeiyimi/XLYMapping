@@ -16,7 +16,6 @@ NSInteger const XLYInvalidMappingTypeMismatchErrorCode = -1;
 NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -2;
 
 static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
-static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id transformedObject, Class type, NSError *__autoreleasing *error);
 
 @interface XLYMapNode ()
 
@@ -24,7 +23,9 @@ static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id
 @property (nonatomic, copy) NSString *toKey;
 @property (nonatomic, strong) XLYMapping *mapping;
 @property (nonatomic, copy) id(^construction)(id);
-@property (nonatomic, copy) Class type;
+@property (nonatomic, strong) Class type;
+
+@property (nonatomic, strong) Class objectClass;
 
 @end
 
@@ -186,7 +187,6 @@ static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id
             id value = [node transformForObjectClass:self.objectClass
                                            withValue:[object valueForKeyPath:node.fromKeyPath]
                                         defaultValue:self.defaultValues[node.toKey]
-                                        rememberType:YES
                                                error:error];
             if (*error) {
                 return nil;
@@ -226,8 +226,13 @@ static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id
 #pragma mark - XLYMapNode implementation
 @implementation XLYMapNode
 
-- (id)transformForObjectClass:(Class)objectClass withValue:(id)value defaultValue:(id)defaultValue rememberType:(BOOL)rememberType error:(NSError **)error
+- (id)transformForObjectClass:(Class)objectClass withValue:(id)value defaultValue:(id)defaultValue error:(NSError *__autoreleasing *)error
 {
+    if (!self.objectClass) {
+        self.objectClass = objectClass;
+        self.type = XLY_propertyTypeOfClass(objectClass, self.toKey);
+    }
+    NSAssert(self.objectClass == objectClass, @"transfrom must always be performed for same objectClass. origin class:'%@' new class:'%@'", self.objectClass, objectClass);
     id result = nil;
     if (!value || [value isKindOfClass:[NSNull class]]) {
         result = defaultValue;
@@ -240,17 +245,56 @@ static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id
             result = value;
         }
     }
-    Class type;
-    if (!rememberType) {
-        type = XLY_propertyTypeOfClass(objectClass, self.toKey);
-    } else {
-        if (!self.type) {
-            self.type = XLY_propertyTypeOfClass(objectClass, self.toKey);
-        }
-        type = self.type;
-    }
-    result = XLY_adjustTransformedObject(self.fromKeyPath, self.toKey, result, type, error);
+    result = [self adjustTransformedObject:result error:error];
     return result;
+}
+
+- (id)adjustTransformedObject:(id)transformedObject error:(NSError **)error
+{
+    //将json中的null也当做没有值处理，将导致不设置该值
+    if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
+    static NSNumberFormatter *numberFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        numberFormatter = [NSNumberFormatter new];
+    });
+    id originTransformedObject = transformedObject;
+    if (self.type == NSNumber.class) {   //number
+        if ([transformedObject isKindOfClass:[NSString class]]) {
+            transformedObject = [numberFormatter numberFromString:transformedObject];
+        }
+    } else if (self.type == NSString.class || self.type == NSMutableString.class) {   //string
+        if ([transformedObject isKindOfClass:[NSNumber class]]) {
+            transformedObject = [transformedObject stringValue];
+        }
+    } else if (self.type == NSURL.class) { //兼容string到URL的转换, 默认使用'URLWithString:'
+        if ([transformedObject isKindOfClass:[NSString class]]) {
+            transformedObject = [NSURL URLWithString:transformedObject];
+        }
+    }
+    //兼容array到set的转换
+    else if (self.type == NSSet.class || self.type == NSMutableSet.class) {
+        if ([transformedObject isKindOfClass:[NSArray class]]) {
+            transformedObject = [NSMutableSet setWithArray:transformedObject];
+        }
+    } else if (self.type == NSOrderedSet.class || self.type == NSMutableOrderedSet.class) {
+        if ([transformedObject isKindOfClass:[NSArray class]]) {
+            transformedObject = [[NSMutableOrderedSet alloc] initWithArray:transformedObject];
+        }
+    }
+    if ([transformedObject respondsToSelector:@selector(mutableCopyWithZone:)]) {
+        transformedObject = [transformedObject mutableCopy];
+    }
+    if (![transformedObject isKindOfClass:self.type] && error) {
+        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", self.fromKeyPath, self.toKey,originTransformedObject, NSStringFromClass([transformedObject class]), self.type];
+        *error = [NSError errorWithDomain:XLYInvalidMappingDomain
+                                     code:XLYInvalidMappingTypeMismatchErrorCode
+                                 userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
+        return nil;
+    }
+    return transformedObject;
 }
 
 @end
@@ -291,54 +335,6 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName)
         return nil;
     }
     return XLY_propertyTypeOfProperty(property);
-}
-
-static id XLY_adjustTransformedObject(NSString *fromKeyPath, NSString *toKey, id transformedObject, Class type, NSError *__autoreleasing *error)
-{
-    //将json中的null也当做没有值处理，将导致不设置该值
-    if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
-        return nil;
-    }
-    static NSNumberFormatter *numberFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        numberFormatter = [NSNumberFormatter new];
-    });
-    id originTransformedObject = transformedObject;
-    if (type == NSNumber.class) {   //number
-        if ([transformedObject isKindOfClass:[NSString class]]) {
-            transformedObject = [numberFormatter numberFromString:transformedObject];
-        }
-    } else if (type == NSString.class || type == NSMutableString.class) {   //string
-        if ([transformedObject isKindOfClass:[NSNumber class]]) {
-            transformedObject = [transformedObject stringValue];
-        }
-    } else if (type == NSURL.class) { //兼容string到URL的转换, 默认使用'URLWithString:'
-        if ([transformedObject isKindOfClass:[NSString class]]) {
-            transformedObject = [NSURL URLWithString:transformedObject];
-        }
-    }
-    //兼容array到set的转换
-    else if (type == NSSet.class || type == NSMutableSet.class) {
-        if ([transformedObject isKindOfClass:[NSArray class]]) {
-            transformedObject = [NSMutableSet setWithArray:transformedObject];
-        }
-    } else if (type == NSOrderedSet.class || type == NSMutableOrderedSet.class) {
-        if ([transformedObject isKindOfClass:[NSArray class]]) {
-            transformedObject = [[NSMutableOrderedSet alloc] initWithArray:transformedObject];
-        }
-    }
-    if ([transformedObject respondsToSelector:@selector(mutableCopyWithZone:)]) {
-        transformedObject = [transformedObject mutableCopy];
-    }
-    if (![transformedObject isKindOfClass:type] && error) {
-        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", fromKeyPath, toKey,originTransformedObject, NSStringFromClass([transformedObject class]), type];
-        *error = [NSError errorWithDomain:XLYInvalidMappingDomain
-                                     code:XLYInvalidMappingTypeMismatchErrorCode
-                                 userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
-        return nil;
-    }
-    return transformedObject;
 }
 
 #pragma mark - debug description
