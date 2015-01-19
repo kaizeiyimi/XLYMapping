@@ -109,7 +109,7 @@
         resultObject = [self transformForObject:JSONObject error:&localError];
         if (localError || !resultObject) {
             resultObject = nil;
-        } else {
+        } else if (![self.parentMapping isKindOfClass:[XLYManagedObjectMapping class]]) {
             [self.context save:nil];
             NSArray *objectIDs;
             if ([resultObject isKindOfClass:[NSManagedObject class]]) {
@@ -149,15 +149,6 @@
             }];
         }
     }];
-}
-
-- (id)transformForObject:(id)object error:(NSError *__autoreleasing *)error
-{
-    __block id result = nil;
-    [self.context performBlockAndWait:^{
-        result = [super transformForObject:object error:error];
-    }];
-    return result;
 }
 
 - (id)getRawResultObjectForJSONDict:(NSDictionary *)dict error:(NSError *__autoreleasing *)error

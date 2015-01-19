@@ -32,6 +32,8 @@
  * It's important to known the fact that auto map can be much slow than normal map, because the mapping system has to find out the valid keys for your object. set to NO and add mappings yourself can make the mapping process faster.
  */
 @property (nonatomic, assign) BOOL enablesAutoMap;
+///the parentMapping is the direct mapping who adds the receiver as a relationship mapping.
+@property (nonatomic, assign, readonly) XLYMapping *parentMapping;
 
 - (instancetype)init NS_REQUIRES_SUPER;
 

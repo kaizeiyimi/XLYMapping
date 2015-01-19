@@ -34,6 +34,8 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
 #pragma mark - XLYMapping
 @interface XLYMapping ()
 
+@property (nonatomic, assign) XLYMapping *parentMapping;
+
 @property (nonatomic, strong) NSMutableDictionary *mappingConstraints;
 @property (nonatomic, strong) NSMutableDictionary *mappingConstraints_toKeyVersion;
 @property (nonatomic, strong) NSMutableDictionary *defaultValues;
@@ -101,6 +103,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
     node.toKey = toKey;
     if (mapping) {
         node.mapping = mapping;
+        node.mapping.parentMapping = self;
     } else {
         node.construction = construction;
     }
@@ -243,7 +246,8 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
         result = value;
     } else {
         if (self.mapping) {
-            result = [self.mapping transformForObject:value error:error];
+//            result = [self.mapping transformForObject:value error:error];
+            result = [self.mapping performSyncMappingWithJSONObject:value error:error];
         } else if (self.construction) {
             result = self.construction(value);
         } else {
