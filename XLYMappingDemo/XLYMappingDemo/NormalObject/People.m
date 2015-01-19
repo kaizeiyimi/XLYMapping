@@ -8,16 +8,6 @@
 
 #import "People.h"
 
-#import "Child.h"
-
 @implementation People
-
-- (instancetype)init
-{
-    if (self = [super init]) {
-        self.children = [NSMutableSet setWithObject:[Child new]];
-    }
-    return self;
-}
 
 @end

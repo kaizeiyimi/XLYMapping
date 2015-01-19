@@ -134,10 +134,12 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
 {
     NSError *localError = nil;
     id object = [self transformForObject:JSONObject error:&localError];
-    if (localError && error) {
-        *error = localError;
+    if (localError) {
+        if (error) {
+            *error = localError;
+        }
     }
-    return [object isKindOfClass:[NSNull class]] ? nil : object;
+    return object;
 }
 
 - (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id, NSError *))completion
@@ -157,7 +159,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
 - (id)transformForObject:(id)object error:(NSError *__autoreleasing *)error
 {
     if(!object || [object isKindOfClass:[NSNull class]]) {
-        return object;
+        return nil;
     }
     if (self.willMapBlock) {
         object = self.willMapBlock(object);
@@ -190,11 +192,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
                 return nil;
             }
             if (value) {
-                if ([value isKindOfClass:[NSNull class]]) {
-                    [resultObject setValue:nil forKey:node.toKey];
-                } else {
-                    [resultObject setValue:value forKey:node.toKey];
-                }
+                [resultObject setValue:value forKey:node.toKey];
                 hasSetValidValue = YES;
             }
         }
@@ -236,10 +234,8 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
     }
     NSAssert(self.objectClass == objectClass, @"transfrom must always be performed for same objectClass. origin class:'%@' new class:'%@'", self.objectClass, objectClass);
     id result = nil;
-    if (!value) {
+    if (!value || [value isKindOfClass:[NSNull class]]) {
         result = defaultValue;
-    } else if ([value isKindOfClass:[NSNull class]]) {
-        result = value;
     } else {
         if (self.mapping) {
             result = [self.mapping transformForObject:value error:error];
@@ -255,15 +251,9 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
 
 - (id)adjustTransformedObject:(id)transformedObject error:(NSError **)error
 {
-    if (!transformedObject) {
+    //将json中的null也当做没有值处理，将导致不设置该值
+    if (!transformedObject || [transformedObject isKindOfClass:[NSNull class]]) {
         return nil;
-    }
-    if ([transformedObject isKindOfClass:[NSNull class]]) {
-        if (self.type == NSNumber.class) {
-            return @0;
-        } else {
-            return transformedObject;
-        }
     }
     static NSNumberFormatter *numberFormatter;
     static dispatch_once_t onceToken;
@@ -302,9 +292,6 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
         *error = [NSError errorWithDomain:XLYInvalidMappingDomain
                                      code:XLYInvalidMappingTypeMismatchErrorCode
                                  userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
-#ifdef DEBUG
-        NSLog(@"XLYMappingError:%@", failureReason);
-#endif
         return nil;
     }
     return transformedObject;
