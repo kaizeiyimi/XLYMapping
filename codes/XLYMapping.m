@@ -15,7 +15,8 @@ NSString * const XLYInvalidMappingDomain = @"XLYInvalidMappingDomain";
 NSInteger const XLYInvalidMappingTypeMismatchErrorCode = -1;
 NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -2;
 
-static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
+static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName, BOOL *isScalarType);
+static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
 
 @interface XLYMapNode ()
 
@@ -23,7 +24,8 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
 @property (nonatomic, copy) NSString *toKey;
 @property (nonatomic, strong) XLYMapping *mapping;
 @property (nonatomic, copy) id(^construction)(id);
-@property (nonatomic, strong) Class type;
+@property (nonatomic, strong) Class typeClass;
+@property (nonatomic, assign) BOOL isScalarType; //typeClass 为NSNumber时有效,用以标识是否为基础类型
 
 @property (nonatomic, strong) Class objectClass;
 
@@ -120,7 +122,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
     [keys removeObjectsInArray:self.mappingConstraints_toKeyVersion.allKeys];
     NSMutableArray *validKeys = [NSMutableArray arrayWithCapacity:keys.count];
     for (NSString *key in keys) {
-        if (XLY_propertyTypeOfClass(self.objectClass, key)) {
+        if (XLY_isValidMappableProperty(self.objectClass, key)) {
             [validKeys addObject:key];
         }
     }
@@ -153,7 +155,6 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
     });
 }
 
-
 - (id)transformForObject:(id)object error:(NSError *__autoreleasing *)error
 {
     if(!object || [object isKindOfClass:[NSNull class]]) {
@@ -162,8 +163,8 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
     if (self.willMapBlock) {
         object = self.willMapBlock(object);
     }
-    if (!object) {
-        return nil;
+    if(!object || [object isKindOfClass:[NSNull class]]) {
+        return object;
     }
     if ([object isKindOfClass:[NSDictionary class]]) {
         XLYMapping *mapping = self;
@@ -177,7 +178,6 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
         if (!resultObject) {
             return nil;
         }
-        BOOL hasSetValidValue = NO;
         if (self.enablesAutoMap) {
             [self fullfilMappingConstraintsWithJSONDict:object];
         }
@@ -195,10 +195,9 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
                 } else {
                     [resultObject setValue:value forKey:node.toKey];
                 }
-                hasSetValidValue = YES;
             }
         }
-        return hasSetValidValue ? resultObject : nil;
+        return resultObject;
     } else if ([object isKindOfClass:[NSArray class]]) {
         NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:[object count]];
         for (id item in object) {
@@ -212,7 +211,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
         }
         return resultArray.count > 0 ? resultArray : nil;
     }
-    NSAssert(false, @"\"%@\" not a valid json object.", object);
+    NSAssert(false, @"\"%@\" is not a valid transfromable root json object.", object);
     return nil;
 }
 
@@ -232,7 +231,9 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
 {
     if (!self.objectClass) {
         self.objectClass = objectClass;
-        self.type = XLY_propertyTypeOfClass(objectClass, self.toKey);
+        BOOL isScalarType = NO;
+        self.typeClass = XLY_propertyTypeOfClass(objectClass, self.toKey, &isScalarType);
+        self.isScalarType = isScalarType;
     }
     NSAssert(self.objectClass == objectClass, @"transfrom must always be performed for same objectClass. origin class:'%@' new class:'%@'", self.objectClass, objectClass);
     id result = nil;
@@ -259,7 +260,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
         return nil;
     }
     if ([transformedObject isKindOfClass:[NSNull class]]) {
-        if (self.type == NSNumber.class) {
+        if (self.typeClass == NSNumber.class && self.isScalarType) {
             return @0;
         } else {
             return transformedObject;
@@ -271,25 +272,25 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
         numberFormatter = [NSNumberFormatter new];
     });
     id originTransformedObject = transformedObject;
-    if (self.type == NSNumber.class) {   //number
+    if (self.typeClass == NSNumber.class) {   //number
         if ([transformedObject isKindOfClass:[NSString class]]) {
             transformedObject = [numberFormatter numberFromString:transformedObject];
         }
-    } else if (self.type == NSString.class || self.type == NSMutableString.class) {   //string
+    } else if (self.typeClass == NSString.class || self.typeClass == NSMutableString.class) {   //string
         if ([transformedObject isKindOfClass:[NSNumber class]]) {
             transformedObject = [transformedObject stringValue];
         }
-    } else if (self.type == NSURL.class) { //兼容string到URL的转换, 默认使用'URLWithString:'
+    } else if (self.typeClass == NSURL.class) { //兼容string到URL的转换, 默认使用'URLWithString:'
         if ([transformedObject isKindOfClass:[NSString class]]) {
-            transformedObject = [NSURL URLWithString:transformedObject];
+            transformedObject = [NSURL URLWithString:[transformedObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         }
     }
     //兼容array到set的转换
-    else if (self.type == NSSet.class || self.type == NSMutableSet.class) {
+    else if (self.typeClass == NSSet.class || self.typeClass == NSMutableSet.class) {
         if ([transformedObject isKindOfClass:[NSArray class]]) {
             transformedObject = [NSMutableSet setWithArray:transformedObject];
         }
-    } else if (self.type == NSOrderedSet.class || self.type == NSMutableOrderedSet.class) {
+    } else if (self.typeClass == NSOrderedSet.class || self.typeClass == NSMutableOrderedSet.class) {
         if ([transformedObject isKindOfClass:[NSArray class]]) {
             transformedObject = [[NSMutableOrderedSet alloc] initWithArray:transformedObject];
         }
@@ -297,8 +298,8 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
     if ([transformedObject respondsToSelector:@selector(mutableCopyWithZone:)]) {
         transformedObject = [transformedObject mutableCopy];
     }
-    if (![transformedObject isKindOfClass:self.type] && error) {
-        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", self.fromKeyPath, self.toKey,originTransformedObject, NSStringFromClass([transformedObject class]), self.type];
+    if (![transformedObject isKindOfClass:self.typeClass] && error) {
+        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", self.fromKeyPath, self.toKey,originTransformedObject, NSStringFromClass([transformedObject class]), self.typeClass];
         *error = [NSError errorWithDomain:XLYInvalidMappingDomain
                                      code:XLYInvalidMappingTypeMismatchErrorCode
                                  userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
@@ -313,13 +314,13 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName);
 @end
 
 #pragma mark - tool functions
-static Class XLY_propertyTypeOfProperty(objc_property_t property)
+static Class XLY_propertyTypeOfProperty(objc_property_t property, BOOL *isScalarType)
 {
     Class propertyClass = nil;
     static NSSet *numberTypeSet;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        numberTypeSet = [NSSet setWithObjects:@"NSNumber",@"c",@"i",@"s",@"l",@"q",@"C",@"I",@"S",@"L",@"Q",@"f",@"d",@"b",@"B",nil];
+        numberTypeSet = [NSSet setWithObjects:@"c",@"i",@"s",@"l",@"q",@"C",@"I",@"S",@"L",@"Q",@"f",@"d",@"b",@"B",nil];
     });
     char *attr = property_copyAttributeValue(property, "T");
     NSString *typeString = [NSString stringWithCString:attr encoding:NSUTF8StringEncoding];
@@ -332,22 +333,40 @@ static Class XLY_propertyTypeOfProperty(objc_property_t property)
         } else {
             propertyClass = [NSObject class];
         }
+        if (isScalarType) {
+            *isScalarType = NO;
+        }
     } else if ([numberTypeSet containsObject:typeString]) {
         propertyClass = [NSNumber class];
+        if (isScalarType) {
+            *isScalarType = YES;
+        }
     }
     return propertyClass;
 }
 
-static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName)
+static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName, BOOL *isScalarType)
 {
     objc_property_t property = class_getProperty(theClass, propertyName.UTF8String);
+    if (isScalarType) {
+        *isScalarType = NO;
+    }
     if ((theClass == [NSDictionary class] || theClass == [NSMutableDictionary class]) && !property) {
         return [NSObject class];
     }
     if (!property) {
         return nil;
     }
-    return XLY_propertyTypeOfProperty(property);
+    return XLY_propertyTypeOfProperty(property, isScalarType);
+}
+
+static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName)
+{
+    if (theClass == [NSDictionary class] || theClass == [NSMutableDictionary class]) {
+        return YES;
+    }
+    objc_property_t property = class_getProperty(theClass, propertyName.UTF8String);
+    return property != nil;
 }
 
 #pragma mark - debug description
@@ -355,7 +374,7 @@ static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName)
 
 - (NSString *)debugDescription
 {
-    NSMutableString *string = [[NSMutableString alloc] initWithFormat:@"['%@ -> %@', class:%@", self.fromKeyPath, self.toKey, self.type];
+    NSMutableString *string = [[NSMutableString alloc] initWithFormat:@"['%@ -> %@', class:%@", self.fromKeyPath, self.toKey, self.typeClass];
     if (self.mapping) {
         [string appendFormat:@", relationShipMapping:%@", self.mapping.objectClass];
     }

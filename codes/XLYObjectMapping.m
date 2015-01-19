@@ -43,13 +43,6 @@
 @implementation XLYManagedObjectMapping
 
 + (instancetype)mappingForClass:(Class)objectClass
-{
-    [NSException raise:@"XLYManagedObjectMappingInvalidInitialization" format:@"managed object mapping must give an entity name and a managedObjectContext.\n \
-     use '+ (instancetype)mappingForClass:(Class)objectClass entityName:(NSString *)entityName primaryKeys:(NSArray *)primaryKeys managedObjectContext:(NSManagedObjectContext *)parentContext' instead."];
-    return nil;
-}
-
-+ (instancetype)mappingForClass:(Class)objectClass
                      entityName:(NSString *)entityName
                     primaryKeys:(NSArray *)primaryKeys
            managedObjectContext:(NSManagedObjectContext *)parentContext
@@ -90,7 +83,7 @@
     [super setDefaultValueForAttributes:defaultValues];
 }
 
-- (void)addRelationShipMapping:(XLYObjectMapping *)mapping fromKeyPath:(NSString *)fromKeyPath toKey:(NSString *)toKey
+- (void)addRelationShipMapping:(XLYMapping *)mapping fromKeyPath:(NSString *)fromKeyPath toKey:(NSString *)toKey
 {
     if (![mapping isKindOfClass:[XLYManagedObjectMapping class]]) {
         [NSException raise:@"XLYManagedObjectMappingInvaldConfig" format:@"relationShip mapping for managedObjectMapping must be XLYManagedObjectMapping."];
@@ -114,31 +107,33 @@
     __block id resultObject;
     [self.context performBlockAndWait:^{
         resultObject = [self transformForObject:JSONObject error:&localError];
-        [self.context save:nil];
-        NSArray *objectIDs;
-        if ([resultObject isKindOfClass:[NSManagedObject class]]) {
-            objectIDs = @[[resultObject objectID]];
+        if (localError || !resultObject) {
+            resultObject = nil;
         } else {
-            objectIDs = [resultObject valueForKey:@"objectID"];
+            [self.context save:nil];
+            NSArray *objectIDs;
+            if ([resultObject isKindOfClass:[NSManagedObject class]]) {
+                objectIDs = @[[resultObject objectID]];
+            } else {    //array of MO
+                objectIDs = [resultObject valueForKey:@"objectID"];
+            }
+            NSManagedObjectContext *parentContext = self.context.parentContext;
+            [parentContext performBlockAndWait:^{
+                NSMutableArray *objects = [NSMutableArray arrayWithCapacity:objectIDs.count];
+                for (NSManagedObjectID *objectID in objectIDs) {
+                    NSManagedObject *mo = [parentContext existingObjectWithID:objectID error:nil];
+                    [objects addObject:mo];
+                }
+                if ([resultObject isKindOfClass:[NSArray class]]) {
+                    resultObject = objects;
+                } else {
+                    resultObject = objects.firstObject;
+                }
+            }];
         }
-        NSManagedObjectContext *parentContext = self.context.parentContext;
-        [parentContext performBlockAndWait:^{
-            NSMutableArray *objects = [NSMutableArray arrayWithCapacity:objectIDs.count];
-            for (NSManagedObjectID *objectID in objectIDs) {
-                NSManagedObject *mo = [parentContext existingObjectWithID:objectID error:nil];
-                [objects addObject:mo];
-            }
-            if (objects.count == 1) {
-                resultObject = objects.firstObject;
-            } else {
-                resultObject = objects;
-            }
-        }];
     }];
-    if (localError) {
-        if (error) {
-            *error = localError;
-        }
+    if (localError && error) {
+        *error = localError;
     }
     return resultObject;
 }
@@ -156,9 +151,18 @@
     }];
 }
 
+- (id)transformForObject:(id)object error:(NSError *__autoreleasing *)error
+{
+    __block id result = nil;
+    [self.context performBlockAndWait:^{
+        result = [super transformForObject:object error:error];
+    }];
+    return result;
+}
+
 - (id)getRawResultObjectForJSONDict:(NSDictionary *)dict error:(NSError *__autoreleasing *)error
 {
-    NSAssert(error, @"must give an inout error to find the raw result object.");
+    NSAssert(error, @"must give an inout error when finding the raw result object.");
     NSInteger primaryKeyCount = 0;
     NSMutableDictionary *predicateFragment = [NSMutableDictionary dictionary];
     for (XLYMapNode *node in self.mappingConstraints.allValues) {

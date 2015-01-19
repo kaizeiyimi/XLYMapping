@@ -18,7 +18,7 @@
 @end
 
 #pragma mark - XLYManagedObjectMapping
-@interface XLYManagedObjectMapping : XLYObjectMapping
+@interface XLYManagedObjectMapping : XLYMapping
 
 + (instancetype)mappingForClass:(Class)objectClass
                      entityName:(NSString *)entityName
