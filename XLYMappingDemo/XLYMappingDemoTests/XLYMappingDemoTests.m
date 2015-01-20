@@ -2,8 +2,8 @@
 //  XLYMappingDemoTests.m
 //  XLYMappingDemoTests
 //
-//  Created by 王凯 on 14/11/3.
-//  Copyright (c) 2014年 kaizei. All rights reserved.
+//  Created by 王凯 on 15/1/19.
+//  Copyright (c) 2015年 kaizei. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
