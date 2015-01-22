@@ -11,7 +11,6 @@
 ///make your own error if needed.
 extern NSString * const XLYInvalidMappingDomain;
 extern NSInteger const XLYInvalidMappingTypeMismatchErrorCode;
-extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
 
 #pragma mark - methods your subclass can override
 @interface XLYMapping (Subclass)
@@ -27,8 +26,8 @@ extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
 ///transform json object. this object will call '-[getRawResultObjectForJSONDict:error:]'.
 - (id)transformForObject:(id)object error:(NSError *__autoreleasing *)error;
 
-///the mappingConstraints. key is fromKeyPath value is an instance of XLYMapNode.
-- (NSDictionary *)mappingConstraints;
+///all the mappingConstraints.
+- (NSArray *)mappingConstraints;
 
 @end
 
@@ -39,10 +38,14 @@ extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
 @property (nonatomic, copy, readonly) NSString *toKey;
 @property (nonatomic, strong, readonly) XLYMapping *mapping;
 @property (nonatomic, copy, readonly) id(^construction)(id);
+@property (nonatomic, strong, readonly) Class typeClass;
+@property (nonatomic, assign, readonly) BOOL isScalarType; //typeClass 为NSNumber时有效,用以标识是否为基础类型
+@property (nonatomic, strong, readonly) Class objectClass;
+
 
 - (id)transformForObjectClass:(Class)objectClass
                     withValue:(id)value
                  defaultValue:(id)defaultValue
-                        error:(NSError **)error;
+                        error:(NSError *__autoreleasing *)error;
 
 @end

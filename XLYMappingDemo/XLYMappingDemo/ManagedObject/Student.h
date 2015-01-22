@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "XLYObjectMapping.h"
+#import "XLYManagedObjectMapping.h"
 
 #import "Person.h"
 
@@ -19,6 +19,6 @@
 @property (nonatomic) int32_t score;
 @property (nonatomic, retain) Teacher *teacher;
 
-+ (XLYObjectMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context;
++ (XLYMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
