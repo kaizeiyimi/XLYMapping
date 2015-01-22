@@ -1,0 +1,23 @@
+{"dogs":[
+  {
+    "name":"DogA",
+    "age":5,
+    "about link":"http://link.to.DogA"
+  },
+  {
+    "name":"DogB",
+    "age":6,
+    "about link":"http://link.to.DogB"
+  }],
+  "cats":[
+    {
+      "name":"CatC",
+      "age":3,
+      "eye color":"70,70,70,1"
+    },
+    {
+      "name":"CatD",
+      "age":4,
+      "eye color":null
+    }]
+}
