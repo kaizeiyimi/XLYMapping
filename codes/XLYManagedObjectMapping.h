@@ -19,7 +19,7 @@ extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
            managedObjectContext:(NSManagedObjectContext *)parentContext;
 
 ///perform mapping synchronously, if an error occurs then return nil. the result will associated with parentContext.
-- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError **)error;
+- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError *__autoreleasing *)error;
 ///perform mapping asynchronously, if an error occurs then the result in callback block will be nil. the callback is in the parentContext's queue, and the result will associated with parentContext.
 - (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id result, NSError *error))completion;
 

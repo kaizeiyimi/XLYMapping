@@ -72,8 +72,7 @@
     NSArray *result = [self.mapping performSyncMappingWithJSONObject:self.JSONObject error:&error];
     XCTAssert([result isKindOfClass:[NSArray class]] && result.count == 2);
     TestPerson *kaizei = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestPerson *person, NSDictionary *bindings) {
-        if (person.identity == 1) return YES;
-        return NO;
+        return person.identity == 1;
     }]].firstObject;
     XCTAssertNotNil(kaizei);
     XCTAssertEqualObjects(kaizei.name, @"kaizei");
@@ -104,15 +103,13 @@
 
     NSArray *result = [self.mapping performSyncMappingWithJSONObject:self.JSONObject error:&error];
     TestPerson *person2 = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestPerson *evaluatedObject, NSDictionary *bindings) {
-        if (evaluatedObject.identity == 2) return YES;
-        return NO;
+        return evaluatedObject.identity == 2;
     }]].firstObject;
     XCTAssertEqual(person, person2);
     XCTAssertEqualObjects(person.name, @"yimi");
 
     TestCar *car1003 = [person2.cars.allObjects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestCar *evaluatedObject, NSDictionary *bindings) {
-        if (evaluatedObject.identity == 1003) return YES;
-        return NO;
+        return evaluatedObject.identity == 1003;
     }]].firstObject;
     XCTAssertEqual(car, car1003);
     XCTAssertEqualObjects(car.vendor, @"cadillac");
@@ -122,29 +119,25 @@
     NSError *error;
     NSArray *result = [self.mapping performSyncMappingWithJSONObject:self.JSONObject error:&error];
     TestPerson *person1 = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestPerson *evaluatedObject, NSDictionary *bindings) {
-        if (evaluatedObject.identity == 1) return YES;
-        return NO;
+        return evaluatedObject.identity == 1;
     }]].firstObject;
     XCTAssert(person1.cars.count == 2);
 
     TestPerson *person2 = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestPerson *evaluatedObject, NSDictionary *bindings) {
-        if (evaluatedObject.identity == 2) return YES;
-        return NO;
+        return evaluatedObject.identity == 2;
     }]].firstObject;
     XCTAssert(person2.age == 25);
     XCTAssert(person2.cars.count == 2);
     //
     result = [self.mapping performSyncMappingWithJSONObject:self.JSONObject2 error:&error];
     TestPerson *person11 = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestPerson *evaluatedObject, NSDictionary *bindings) {
-        if (evaluatedObject.identity == 1) return YES;
-        return NO;
+        return evaluatedObject.identity == 1;
     }]].firstObject;
     XCTAssertEqual(person1, person11);
     XCTAssert(person11.cars.count == 1);
 
     TestPerson *person12 = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(TestPerson *evaluatedObject, NSDictionary *bindings) {
-        if (evaluatedObject.identity == 2) return YES;
-        return NO;
+        return evaluatedObject.identity == 2;
     }]].firstObject;
     XCTAssertEqual(person2, person12);
     XCTAssert(person12.age == 0);

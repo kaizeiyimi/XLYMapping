@@ -60,7 +60,7 @@
 - (void)setDefaultValueForAttributes:(NSDictionary *)dict;
 
 ///perform mapping synchronously, if an error occurs then return nil.
-- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError **)error;
+- (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError *__autoreleasing *)error;
 ///perform mapping asynchronously, if an error occurs then the result in callback block will be nil.
 - (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id result, NSError *error))completion;
 

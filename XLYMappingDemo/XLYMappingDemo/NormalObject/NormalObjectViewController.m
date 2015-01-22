@@ -42,7 +42,7 @@
     };
     
     //the enablesAutoMap tells the mapping system try to map every fromKey to the toKey with same string value.
-    //for example, from is 'name', to is 'name' too, so you can just make 'anablesAutoMap' as YES. when perform mapping,
+    //for example, from is 'name', to is 'name' too, so you can just make 'enablesAutoMap' as YES. when perform mapping,
     // the mapping system will try to add mapping constraints that you didn't add before.
     peopleMapping.enablesAutoMap = YES;
 //    [peopleMapping addAttributeMappingFromArray:@[@"name"]];

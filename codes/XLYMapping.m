@@ -119,7 +119,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
     self.mappingConstraints_toKeyVersion[node.toKey] = node;
 }
 
-- (void)fullfilMappingConstraintsWithJSONDict:(NSDictionary *)JSONDict
+- (void)fulfillMappingConstraintsWithJSONDict:(NSDictionary *)JSONDict
 {
     NSMutableArray *keys = [JSONDict.allKeys mutableCopy];
     [keys removeObjectsInArray:self.mappingConstraints_fromKeyVersion.allKeys];
@@ -140,7 +140,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
     return self.mappingConstraints_fromKeyVersion.allValues;
 }
 
-#pragma mark methods can be overrided
+#pragma mark methods can be overridded
 - (id)performSyncMappingWithJSONObject:(id)JSONObject error:(NSError *__autoreleasing *)error
 {
     NSError *localError = nil;
@@ -188,7 +188,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
             return nil;
         }
         if (self.enablesAutoMap) {
-            [self fullfilMappingConstraintsWithJSONDict:object];
+            [self fulfillMappingConstraintsWithJSONDict:object];
         }
         for (XLYMapNode *node in self.mappingConstraints) {
             id value = [node transformForObjectClass:self.objectClass

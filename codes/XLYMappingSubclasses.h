@@ -47,6 +47,6 @@ extern NSInteger const XLYInvalidMappingNoPropertyErrorCode;
 - (id)transformForObjectClass:(Class)objectClass
                     withValue:(id)value
                  defaultValue:(id)defaultValue
-                        error:(NSError **)error;
+                        error:(NSError *__autoreleasing *)error;
 
 @end

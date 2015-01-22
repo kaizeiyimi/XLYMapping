@@ -66,12 +66,10 @@ NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -3;
 {
     if (![mapping isKindOfClass:[XLYManagedObjectMapping class]]) {
         [NSException raise:@"XLYManagedObjectMappingInvaldConfig" format:@"relationShip mapping for managedObjectMapping must be XLYManagedObjectMapping."];
-        return;
     }
     XLYManagedObjectMapping *theMapping = (XLYManagedObjectMapping *)mapping;
     if (theMapping.context.parentContext != self.context.parentContext) {
         [NSException raise:@"XLYManagedObjectMappingInvaldConfig" format:@"the MOCs of current mapping and relationShip mapping must have the same parent managedObjectContext."];
-        return;
     }
     [[NSNotificationCenter defaultCenter] removeObserver:theMapping
                                                     name:NSManagedObjectContextDidSaveNotification
@@ -157,9 +155,11 @@ NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -3;
         }
     }
     if (self.primaryKeys.count != primaryKeyCount) {
-        *error = [NSError errorWithDomain:XLYInvalidMappingDomain
-                                     code:XLYInvalidMappingManagedObjectPrimaryKeyErrorCode
-                                 userInfo:@{NSLocalizedFailureReasonErrorKey:@"all specified primary keys must also be mapped."}];
+        if (error) {
+            *error = [NSError errorWithDomain:XLYInvalidMappingDomain
+                                         code:XLYInvalidMappingManagedObjectPrimaryKeyErrorCode
+                                     userInfo:@{NSLocalizedFailureReasonErrorKey:@"all specified primary keys must also be mapped."}];
+        }
         return nil;
     }
     id resultObject;

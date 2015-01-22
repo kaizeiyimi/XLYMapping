@@ -17,9 +17,9 @@
     [mapping addAttributeMappingFromDict:@{@"name":@"name"}];
     [mapping addMappingFromKeyPath:@"eye color" toKey:@"eyeColor" construction:^id(id JSONObject) {
         NSArray *colorComponents = [JSONObject componentsSeparatedByString:@","];
-        return [UIColor colorWithRed:[colorComponents[0] floatValue] / 255.0
-                               green:[colorComponents[1] floatValue] / 255.0
-                                blue:[colorComponents[2] floatValue] / 255.0
+        return [UIColor colorWithRed:[colorComponents[0] floatValue] / 255.0f
+                               green:[colorComponents[1] floatValue] / 255.0f
+                                blue:[colorComponents[2] floatValue] / 255.0f
                                alpha:[colorComponents[3] floatValue]];
     }];
     return mapping;
