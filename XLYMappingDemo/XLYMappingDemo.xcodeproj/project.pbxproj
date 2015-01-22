@@ -10,8 +10,13 @@
 		BC1F0110285275F436253FC9 /* TestCat.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F06D7B00FB0663249A32C /* TestCat.m */; };
 		BC1F01C0028E9A080A4540F6 /* XLYNormalObjectMappingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F0B039637A80DFC1B7D9A /* XLYNormalObjectMappingTest.m */; };
 		BC1F02309C812B5A7B716527 /* Animals.json in Resources */ = {isa = PBXBuildFile; fileRef = BC1F076BF5046C92A8306803 /* Animals.json */; };
+		BC1F035BE87C13536AEB4C4E /* XLYManagedObjectMappingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F02E9DDFC0A65B9958B8F /* XLYManagedObjectMappingTest.m */; };
+		BC1F0663722257BA9E92BC48 /* TestPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F0EC1A01C0CF2CA567027 /* TestPerson.m */; };
+		BC1F0746C93EC2DE4C74D261 /* Persons.json in Resources */ = {isa = PBXBuildFile; fileRef = BC1F0FDE1F9FD7CB1D2DD1BF /* Persons.json */; };
 		BC1F07B1A66BA98624491B28 /* TestAnimal.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F0C9942184AEC5C01896B /* TestAnimal.m */; };
 		BC1F0C257963F63D94A34113 /* TestDog.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F0E9CE60E7A77DB3142E8 /* TestDog.m */; };
+		BC1F0DA156D578D8171C9F37 /* Persons2.json in Resources */ = {isa = PBXBuildFile; fileRef = BC1F020691D9F15ADBA3728F /* Persons2.json */; };
+		BC1F0E29CB625F34D45AF098 /* TestCar.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F0FA46CB10FBACD809159 /* TestCar.m */; };
 		F6059FBE1A07646700F667CB /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F6059FBC1A07646700F667CB /* Model.xcdatamodeld */; };
 		F6059FC41A07660700F667CB /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = F6059FC31A07660700F667CB /* Student.m */; };
 		F6059FC61A0766C000F667CB /* Scores.json in Resources */ = {isa = PBXBuildFile; fileRef = F6059FC51A0766C000F667CB /* Scores.json */; };
@@ -34,6 +39,7 @@
 		F6384AF01A072EBA0023A97D /* Cat.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AEF1A072EBA0023A97D /* Cat.m */; };
 		F6384AF21A07341E0023A97D /* Animals.json in Resources */ = {isa = PBXBuildFile; fileRef = F6384AF11A07341E0023A97D /* Animals.json */; };
 		F6B3CBE91A70A99A00150015 /* XLYManagedObjectMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3CBE81A70A99A00150015 /* XLYManagedObjectMapping.m */; };
+		F6B3CBEC1A70E9D600150015 /* TestPersons.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F6B3CBEA1A70E9D600150015 /* TestPersons.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,13 +54,20 @@
 
 /* Begin PBXFileReference section */
 		BC1F0170FE16FE1564796610 /* TestCat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCat.h; sourceTree = "<group>"; };
+		BC1F020691D9F15ADBA3728F /* Persons2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.json; path = Persons2.json; sourceTree = "<group>"; };
+		BC1F02E9DDFC0A65B9958B8F /* XLYManagedObjectMappingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYManagedObjectMappingTest.m; sourceTree = "<group>"; };
 		BC1F04C5692E44BA85F5A9CB /* TestAnimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAnimal.h; sourceTree = "<group>"; };
 		BC1F06D7B00FB0663249A32C /* TestCat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCat.m; sourceTree = "<group>"; };
 		BC1F076BF5046C92A8306803 /* Animals.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = Animals.json; sourceTree = "<group>"; };
+		BC1F087567A3CA5742596DFE /* TestPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestPerson.h; sourceTree = "<group>"; };
 		BC1F0B039637A80DFC1B7D9A /* XLYNormalObjectMappingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYNormalObjectMappingTest.m; sourceTree = "<group>"; };
 		BC1F0C9942184AEC5C01896B /* TestAnimal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAnimal.m; sourceTree = "<group>"; };
 		BC1F0D0F34D4F06FC98FB717 /* TestDog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestDog.h; sourceTree = "<group>"; };
 		BC1F0E9CE60E7A77DB3142E8 /* TestDog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestDog.m; sourceTree = "<group>"; };
+		BC1F0EC1A01C0CF2CA567027 /* TestPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestPerson.m; sourceTree = "<group>"; };
+		BC1F0EE35C45E215A34653BB /* TestCar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCar.h; sourceTree = "<group>"; };
+		BC1F0FA46CB10FBACD809159 /* TestCar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCar.m; sourceTree = "<group>"; };
+		BC1F0FDE1F9FD7CB1D2DD1BF /* Persons.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = Persons.json; sourceTree = "<group>"; };
 		F6059FBD1A07646700F667CB /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		F6059FC21A07660700F667CB /* Student.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
 		F6059FC31A07660700F667CB /* Student.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
@@ -96,6 +109,7 @@
 		F63D3AF01A6CF7A7007D07C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F6B3CBE71A70A99A00150015 /* XLYManagedObjectMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLYManagedObjectMapping.h; sourceTree = "<group>"; };
 		F6B3CBE81A70A99A00150015 /* XLYManagedObjectMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYManagedObjectMapping.m; sourceTree = "<group>"; };
+		F6B3CBEB1A70E9D600150015 /* TestPersons.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestPersons.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +143,21 @@
 				BC1F0B039637A80DFC1B7D9A /* XLYNormalObjectMappingTest.m */,
 			);
 			path = NormalObjectTest;
+			sourceTree = "<group>";
+		};
+		BC1F0E7D33F6825AFB9FC590 /* ManagedObjectTest */ = {
+			isa = PBXGroup;
+			children = (
+				BC1F0FDE1F9FD7CB1D2DD1BF /* Persons.json */,
+				BC1F020691D9F15ADBA3728F /* Persons2.json */,
+				F6B3CBEA1A70E9D600150015 /* TestPersons.xcdatamodeld */,
+				BC1F087567A3CA5742596DFE /* TestPerson.h */,
+				BC1F0EC1A01C0CF2CA567027 /* TestPerson.m */,
+				BC1F0FA46CB10FBACD809159 /* TestCar.m */,
+				BC1F0EE35C45E215A34653BB /* TestCar.h */,
+				BC1F02E9DDFC0A65B9958B8F /* XLYManagedObjectMappingTest.m */,
+			);
+			path = ManagedObjectTest;
 			sourceTree = "<group>";
 		};
 		F6384AAD1A0725780023A97D = {
@@ -232,6 +261,7 @@
 			children = (
 				F63D3AEF1A6CF7A7007D07C1 /* Supporting Files */,
 				BC1F0CDE24C4A9E80456FB8B /* NormalObjectTest */,
+				BC1F0E7D33F6825AFB9FC590 /* ManagedObjectTest */,
 			);
 			path = XLYMappingDemoTests;
 			sourceTree = "<group>";
@@ -338,6 +368,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC1F02309C812B5A7B716527 /* Animals.json in Resources */,
+				BC1F0746C93EC2DE4C74D261 /* Persons.json in Resources */,
+				BC1F0DA156D578D8171C9F37 /* Persons2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +407,10 @@
 				BC1F0110285275F436253FC9 /* TestCat.m in Sources */,
 				BC1F07B1A66BA98624491B28 /* TestAnimal.m in Sources */,
 				BC1F01C0028E9A080A4540F6 /* XLYNormalObjectMappingTest.m in Sources */,
+				F6B3CBEC1A70E9D600150015 /* TestPersons.xcdatamodeld in Sources */,
+				BC1F0663722257BA9E92BC48 /* TestPerson.m in Sources */,
+				BC1F0E29CB625F34D45AF098 /* TestCar.m in Sources */,
+				BC1F035BE87C13536AEB4C4E /* XLYManagedObjectMappingTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,6 +618,16 @@
 			);
 			currentVersion = F6059FBD1A07646700F667CB /* Model.xcdatamodel */;
 			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		F6B3CBEA1A70E9D600150015 /* TestPersons.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F6B3CBEB1A70E9D600150015 /* TestPersons.xcdatamodel */,
+			);
+			currentVersion = F6B3CBEB1A70E9D600150015 /* TestPersons.xcdatamodel */;
+			path = TestPersons.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

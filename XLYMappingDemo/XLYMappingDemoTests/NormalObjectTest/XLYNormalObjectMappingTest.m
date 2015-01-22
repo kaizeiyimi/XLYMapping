@@ -82,7 +82,7 @@
     }
 }
 
-- (void)testPerformanceExample {
+- (void)testNormalObjectMappingPerformance {
     NSData *data = [NSData dataWithContentsOfURL:[[NSBundle bundleForClass:self.class] URLForResource:@"Animals" withExtension:@"json"]];
     id JSONObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     XLYMapping *mapping = [self generateAnimalMapping];

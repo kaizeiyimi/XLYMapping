@@ -1,0 +1,19 @@
+[
+  {
+    "name":"kaizei",
+    "age":26,
+    "id":1,
+    "cars":[
+      {
+        "vendor":"lamborghini",
+        "id":1001
+      }
+    ]
+  },
+  {
+    "name":"yimi",
+    "age":null,
+    "id":2,
+    "cars":null
+  }
+]
