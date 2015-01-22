@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "Person.h"
-#import "XLYObjectMapping.h"
+#import "XLYManagedObjectMapping.h"
 
 @class Student;
 
@@ -18,7 +18,7 @@
 @property (nonatomic, retain) NSString * schoolName;
 @property (nonatomic, retain) NSSet *students;
 
-+ (XLYObjectMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context;
++ (XLYMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 

@@ -29,6 +29,7 @@
 		F6384AF01A072EBA0023A97D /* Cat.m in Sources */ = {isa = PBXBuildFile; fileRef = F6384AEF1A072EBA0023A97D /* Cat.m */; };
 		F6384AF21A07341E0023A97D /* Animals.json in Resources */ = {isa = PBXBuildFile; fileRef = F6384AF11A07341E0023A97D /* Animals.json */; };
 		F63D3AF21A6CF7A7007D07C1 /* XLYMappingDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F63D3AF11A6CF7A7007D07C1 /* XLYMappingDemoTests.m */; };
+		F6B3CBE91A70A99A00150015 /* XLYManagedObjectMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3CBE81A70A99A00150015 /* XLYManagedObjectMapping.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,8 @@
 		F63D3AED1A6CF7A7007D07C1 /* XLYMappingDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XLYMappingDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F63D3AF01A6CF7A7007D07C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F63D3AF11A6CF7A7007D07C1 /* XLYMappingDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XLYMappingDemoTests.m; sourceTree = "<group>"; };
+		F6B3CBE71A70A99A00150015 /* XLYManagedObjectMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLYManagedObjectMapping.h; sourceTree = "<group>"; };
+		F6B3CBE81A70A99A00150015 /* XLYManagedObjectMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYManagedObjectMapping.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +156,8 @@
 				F6356AC41A07B4E000BA6956 /* XLYMappingSubclasses.h */,
 				F6384AE01A0725E70023A97D /* XLYObjectMapping.h */,
 				F6384AE11A0725E70023A97D /* XLYObjectMapping.m */,
+				F6B3CBE71A70A99A00150015 /* XLYManagedObjectMapping.h */,
+				F6B3CBE81A70A99A00150015 /* XLYManagedObjectMapping.m */,
 			);
 			name = codes;
 			path = ../../codes;
@@ -317,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6059FCF1A07723500F667CB /* Teacher.m in Sources */,
+				F6B3CBE91A70A99A00150015 /* XLYManagedObjectMapping.m in Sources */,
 				F6384AED1A072EA50023A97D /* Dog.m in Sources */,
 				F6384ABF1A0725780023A97D /* AppDelegate.m in Sources */,
 				F6059FCC1A07691D00F667CB /* MangedObjectTableViewController.m in Sources */,

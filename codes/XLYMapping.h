@@ -18,7 +18,7 @@
  for more detail, please refer to the README.md file.
  */
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 @interface XLYMapping : NSObject
 
