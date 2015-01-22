@@ -13,7 +13,8 @@
 + (XLYObjectMapping *)defaultMapping
 {
     XLYObjectMapping *mapping = [XLYObjectMapping mappingForClass:self.class];
-    [mapping addAttributeMappingFromArray:@[@"name", @"height"]];
+    [mapping addAttributeMappingFromArray:@[@"height"]];
+    [mapping addAttributeMappingFromDict:@{@"name":@"name"}];
     [mapping addMappingFromKeyPath:@"eye color" toKey:@"eyeColor" construction:^id(id JSONObject) {
         NSArray *colorComponents = [JSONObject componentsSeparatedByString:@","];
         return [UIColor colorWithRed:[colorComponents[0] floatValue] / 255.0

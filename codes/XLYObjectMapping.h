@@ -17,7 +17,11 @@
 
 @end
 
+
 #pragma mark - XLYManagedObjectMapping
+
+extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
+
 @interface XLYManagedObjectMapping : XLYMapping
 
 + (instancetype)mappingForClass:(Class)objectClass

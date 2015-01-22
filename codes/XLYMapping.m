@@ -13,7 +13,7 @@
 
 NSString * const XLYInvalidMappingDomain = @"XLYInvalidMappingDomain";
 NSInteger const XLYInvalidMappingTypeMismatchErrorCode = -1;
-NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -2;
+NSInteger const XLYInvalidMappingNoPropertyErrorCode = -2;
 
 static Class XLY_propertyTypeOfClass(Class theClass, NSString *propertyName, BOOL *isScalarType);
 static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
@@ -36,7 +36,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
 
 @property (nonatomic, assign) XLYMapping *parentMapping;
 
-@property (nonatomic, strong) NSMutableDictionary *mappingConstraints;
+@property (nonatomic, strong) NSMutableDictionary *mappingConstraints_fromKeyVersion;
 @property (nonatomic, strong) NSMutableDictionary *mappingConstraints_toKeyVersion;
 @property (nonatomic, strong) NSMutableDictionary *defaultValues;
 
@@ -47,7 +47,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.mappingConstraints = [NSMutableDictionary new];
+        self.mappingConstraints_fromKeyVersion = [NSMutableDictionary new];
         self.mappingConstraints_toKeyVersion = [NSMutableDictionary new];
         self.defaultValues = [NSMutableDictionary new];
     }
@@ -102,8 +102,9 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
     node.fromKeyPath = fromKeyPath;
     node.toKey = toKey;
     if (mapping) {
+        NSAssert(mapping.parentMapping == nil, @"one mapping object can only be added as relationship mapping once.");
+        mapping.parentMapping = self;
         node.mapping = mapping;
-        node.mapping.parentMapping = self;
     } else {
         node.construction = construction;
     }
@@ -112,16 +113,16 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
 
 - (void)addMappingNode:(XLYMapNode *)node
 {
-    NSAssert(!self.mappingConstraints[node.fromKeyPath], @"'%@' of class '%@' cannot map more than twice.", node.fromKeyPath, self.objectClass);
+    NSAssert(!self.mappingConstraints_fromKeyVersion[node.fromKeyPath], @"'%@' of class '%@' cannot map more than twice.", node.fromKeyPath, self.objectClass);
     NSAssert(!self.mappingConstraints_toKeyVersion[node.toKey], @"'%@' of class '%@' cannot be mapped more than twice.", node.toKey, self.objectClass);
-    self.mappingConstraints[node.fromKeyPath] = node;
+    self.mappingConstraints_fromKeyVersion[node.fromKeyPath] = node;
     self.mappingConstraints_toKeyVersion[node.toKey] = node;
 }
 
 - (void)fullfilMappingConstraintsWithJSONDict:(NSDictionary *)JSONDict
 {
     NSMutableArray *keys = [JSONDict.allKeys mutableCopy];
-    [keys removeObjectsInArray:self.mappingConstraints.allKeys];
+    [keys removeObjectsInArray:self.mappingConstraints_fromKeyVersion.allKeys];
     [keys removeObjectsInArray:self.mappingConstraints_toKeyVersion.allKeys];
     NSMutableArray *validKeys = [NSMutableArray arrayWithCapacity:keys.count];
     for (NSString *key in keys) {
@@ -132,6 +133,11 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
     if (validKeys.count) {
          [self addAttributeMappingFromArray:validKeys];
     }
+}
+
+- (NSArray *)mappingConstraints
+{
+    return self.mappingConstraints_fromKeyVersion.allValues;
 }
 
 #pragma mark methods can be overrided
@@ -184,7 +190,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
         if (self.enablesAutoMap) {
             [self fullfilMappingConstraintsWithJSONDict:object];
         }
-        for (XLYMapNode *node in self.mappingConstraints.allValues) {
+        for (XLYMapNode *node in self.mappingConstraints) {
             id value = [node transformForObjectClass:self.objectClass
                                            withValue:[object valueForKeyPath:node.fromKeyPath]
                                         defaultValue:self.defaultValues[node.toKey]
@@ -214,7 +220,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
         }
         return resultArray.count > 0 ? resultArray : nil;
     }
-    NSAssert(false, @"\"%@\" is not a valid transfromable root json object.", object);
+    NSAssert(false, @"\"%@\" is not a valid mappable root json for class:'%@'.", object, NSStringFromClass(self.objectClass));
     return nil;
 }
 
@@ -232,10 +238,11 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
 
 - (id)transformForObjectClass:(Class)objectClass withValue:(id)value defaultValue:(id)defaultValue error:(NSError *__autoreleasing *)error
 {
-    if (!self.objectClass) {
+    if (!self.objectClass) {    //delays the confirmation of isScalarType, typeClass and objectClass here.
         self.objectClass = objectClass;
         BOOL isScalarType = NO;
         self.typeClass = XLY_propertyTypeOfClass(objectClass, self.toKey, &isScalarType);
+        NSAssert(self.typeClass, @"class:'%@' does not contain a property named:'%@'.", NSStringFromClass(self.objectClass), self.toKey);
         self.isScalarType = isScalarType;
     }
     NSAssert(self.objectClass == objectClass, @"transfrom must always be performed for same objectClass. origin class:'%@' new class:'%@'", self.objectClass, objectClass);
@@ -246,7 +253,6 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
         result = value;
     } else {
         if (self.mapping) {
-//            result = [self.mapping transformForObject:value error:error];
             result = [self.mapping performSyncMappingWithJSONObject:value error:error];
         } else if (self.construction) {
             result = self.construction(value);
@@ -302,14 +308,16 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName);
     if ([transformedObject respondsToSelector:@selector(mutableCopyWithZone:)]) {
         transformedObject = [transformedObject mutableCopy];
     }
-    if (![transformedObject isKindOfClass:self.typeClass] && error) {
-        NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", self.fromKeyPath, self.toKey,originTransformedObject, NSStringFromClass([transformedObject class]), self.typeClass];
-        *error = [NSError errorWithDomain:XLYInvalidMappingDomain
-                                     code:XLYInvalidMappingTypeMismatchErrorCode
-                                 userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
+    if (![transformedObject isKindOfClass:self.typeClass]) {
+        if (error) {
+            NSString *failureReason = [NSString stringWithFormat:@"transformed object cannot satisfy the destination type. fromKeyPath:\"%@\", toKey:\"%@\", transformedObject:\"%@\", transformedObjectType:\"%@\", destinationType:\"%@\"", self.fromKeyPath, self.toKey,originTransformedObject, NSStringFromClass([transformedObject class]), self.typeClass];
+            *error = [NSError errorWithDomain:XLYInvalidMappingDomain
+                                         code:XLYInvalidMappingTypeMismatchErrorCode
+                                     userInfo:@{NSLocalizedFailureReasonErrorKey:failureReason}];
 #ifdef DEBUG
         NSLog(@"XLYMappingError:%@", failureReason);
 #endif
+        }
         return nil;
     }
     return transformedObject;
@@ -392,7 +400,7 @@ static BOOL XLY_isValidMappableProperty(Class theClass, NSString *propertyName)
 
 - (NSString *)debugDescription
 {
-    return [self.mappingConstraints.allValues debugDescription];
+    return [self.mappingConstraints debugDescription];
 }
 
 @end

@@ -8,12 +8,12 @@
 
 /*
  valid JSON value can be:
- 1. number(integer or float number) //coresponding to NSNumber
- 2. boolean (true or false)         //also coresponding to NSNumber
- 3. null                            //coresponding to NSNull
- 4. string                          //coresponding to NSString
- 5. array                           //coresponding to NSArray
- 6. object                          //coresponding to NSDictionary
+ 1. number(integer or float number) //corresponding to NSNumber
+ 2. boolean (true or false)         //also corresponding to NSNumber
+ 3. null                            //corresponding to NSNull
+ 4. string                          //corresponding to NSString
+ 5. array                           //corresponding to NSArray
+ 6. object                          //corresponding to NSDictionary
  
  for more detail, please refer to the README.md file.
  */
@@ -32,10 +32,10 @@
  * It's important to known the fact that auto map can be much slow than normal map, because the mapping system has to find out the valid keys for your object. set to NO and add mappings yourself can make the mapping process faster.
  */
 @property (nonatomic, assign) BOOL enablesAutoMap;
-///the parentMapping is the direct mapping who adds the receiver as a relationship mapping.
+///the parentMapping is the mapping who adds the receiver as a relationship mapping.
 @property (nonatomic, assign, readonly) XLYMapping *parentMapping;
 
-- (instancetype)init NS_REQUIRES_SUPER;
+- (instancetype)init;
 
 #pragma mark methods you should only use
 ///key is the fromKeyPath, value is the toKey.
@@ -46,7 +46,7 @@
 - (void)addMappingFromKeyPath:(NSString *)fromKeyPath
                         toKey:(NSString *)toKey
                  construction:(id(^)(id JSONObject))construction;
-///add a relationShip mapping.
+///add a relationShip mapping. one mapping object can only be added as relationship mapping once.
 - (void)addRelationShipMapping:(XLYMapping *)mapping
                    fromKeyPath:(NSString *)fromKeyPath
                          toKey:(NSString *)toKey;

@@ -42,6 +42,8 @@
 
 @implementation XLYManagedObjectMapping
 
+NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode = -3;
+
 + (instancetype)mappingForClass:(Class)objectClass
                      entityName:(NSString *)entityName
                     primaryKeys:(NSArray *)primaryKeys
@@ -107,9 +109,10 @@
     __block id resultObject;
     [self.context performBlockAndWait:^{
         resultObject = [self transformForObject:JSONObject error:&localError];
-        if (localError || !resultObject) {
+        if (localError) {
             resultObject = nil;
-        } else if (![self.parentMapping isKindOfClass:[XLYManagedObjectMapping class]]) {
+        } else if ((resultObject && ![resultObject isKindOfClass:[NSNull class]])
+                    && ![self.parentMapping isKindOfClass:[XLYManagedObjectMapping class]]) {
             [self.context save:nil];
             NSArray *objectIDs;
             if ([resultObject isKindOfClass:[NSManagedObject class]]) {
@@ -156,7 +159,7 @@
     NSAssert(error, @"must give an inout error when finding the raw result object.");
     NSInteger primaryKeyCount = 0;
     NSMutableDictionary *predicateFragment = [NSMutableDictionary dictionary];
-    for (XLYMapNode *node in self.mappingConstraints.allValues) {
+    for (XLYMapNode *node in self.mappingConstraints) {
         if ([self.primaryKeys containsObject:node.toKey]) {
             id value = [node transformForObjectClass:self.objectClass
                                            withValue:[dict valueForKey:node.fromKeyPath]
