@@ -15,7 +15,7 @@
 @dynamic score;
 @dynamic teacher;
 
-+ (XLYObjectMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context
++ (XLYMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context
 {
     XLYManagedObjectMapping *mapping = [XLYManagedObjectMapping mappingForClass:self.class entityName:@"Student" primaryKeys:@[@"identity"] managedObjectContext:context];
     [mapping addAttributeMappingFromArray:@[@"identity",@"name",@"score"]];

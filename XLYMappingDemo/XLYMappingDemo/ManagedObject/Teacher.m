@@ -15,7 +15,7 @@
 @dynamic schoolName;
 @dynamic students;
 
-+ (XLYObjectMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context
++ (XLYMapping *)defaultMappingInManagedObjectContext:(NSManagedObjectContext *)context
 {
     XLYManagedObjectMapping *mapping = [XLYManagedObjectMapping mappingForClass:self.class entityName:@"Teacher" primaryKeys:@[@"identity"] managedObjectContext:context];
     [mapping addAttributeMappingFromArray:@[@"identity",@"name"]];
