@@ -9,4 +9,5 @@
 @interface TestDog : TestAnimal
 
 @property (nonatomic, copy) NSURL *aboutLink;
+
 @end

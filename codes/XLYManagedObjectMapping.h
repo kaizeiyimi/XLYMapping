@@ -24,4 +24,3 @@ extern NSInteger const XLYInvalidMappingManagedObjectPrimaryKeyErrorCode;
 - (void)performAsyncMappingWithJSONObject:(id)JSONObject completion:(void(^)(id result, NSError *error))completion;
 
 @end
-

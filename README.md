@@ -2,141 +2,187 @@ XLYMapping system.
 ======
 
 XLYMapping is designed to map JSON into local object.
-the destination object can be object which inherited from NSObject or managedObject.
+the destination object can be object which inherited from NSObject cause I use KVC to set values.
 
-more details are shown below in the demo codes.
+more details are shown below in the demo and test codes.
 
 NOTICE: the mapping process is as follow:
 ------
 1. will map. a chance to modify the JSON.
-2. dynamic map. achange to give another mapping.
+2. dynamic map. a change to give another mapping.
 3. create a destination object. if failed then cancel the mapping.
-4. transform property. a construction block can replace the default transform.
+4. transform property. a relationship mapping or construction block can replace the default transform.
 5. validate transformed value. if failed then cancel the mapping.
 
 the validate process is compatible for some specified types: number, string, set, orderedSet and URL. please read the code for more details.
 
-#normal class mapping
+#normal NSObject mapping
 
-###'People' and 'Child' class defination
+###'TestCat' and 'TestDog' class definition
 
 ```objective-c
-    //defination of People class
-    @interface People : NSObject
+
+    //definition of TestAnimal class
+    @interface TestAnimal : NSObject
+   
     @property (nonatomic, copy) NSString *name;
-    @property (nonatomic, assign) double identity;
-    @property (nonatomic, strong) NSMutableSet *kids;
+    @property (nonatomic, assign) NSInteger age;
+    
     @end
 
-    //defination of Child class
-    @interface Child : NSObject
-    @property (nonatomic, copy) NSString *name;
-    @property (nonatomic, assign) BOOL isMale;
+    //definition of TestCat class
+    @interface TestCat : TestAnimal
+    
+    @property (nonatomic, strong) UIColor *eyeColor;
+    
+    @end
+    
+    //definition of TestDog class
+    @interface TestDog : TestAnimal
+    
+    @property (nonatomic, copy) NSURL *aboutLink;
+    
     @end
 ```
 
-###JSON example1
+### Animals.json
     //this is a example. our JSON is:
-    {"people_name":"kaizei",
-    "more":{"id":123.45},
-    "children":[
-        {"child_name":"youzi", "sex":"boy"},
-        {"child_name": "huolongguo", "sex": "girl"}
+    {"dogs":[
+      {
+        "name":"DogA",
+        "age":5,
+        "about link":"http://link.to.DogA"
+      },
+      {
+        "name":"DogB",
+        "age":6,
+        "about link":"http://link.to.DogB"
+      }],
+      "cats":[
+        {
+          "name":"CatC",
+          "age":3,
+          "eye color":"70,70,70,1"
+        },
+        {
+          "name":"CatD",
+          "age":4,
+          "eye color":null
+        }]
+    }
+
+###setup normal object mapping and transform
+
+```objective-c
+
+    //setup mapping.
+    XLYObjectMapping *dogMapping = [XLYObjectMapping mappingForClass:[TestDog class]];
+    [dogMapping addAttributeMappingFromArray:@[@"name", @"age"]];
+    [dogMapping addAttributeMappingFromDict:@{@"about link":@"aboutLink"}];
+    
+    XLYObjectMapping *catMapping = [XLYObjectMapping mappingForClass:[TestCat class]];
+    [catMapping addAttributeMappingFromArray:@[@"name", @"age"]];
+    [catMapping addMappingFromKeyPath:@"eye color" toKey:@"eyeColor" construction:^id(id JSONObject) {
+    NSArray *colorComponents = [JSONObject componentsSeparatedByString:@","];
+    return [UIColor colorWithRed:[colorComponents[0] floatValue] / 255.0f
+                           green:[colorComponents[1] floatValue] / 255.0f
+                           blue:[colorComponents[2] floatValue] / 255.0f
+                           alpha:[colorComponents[3] floatValue]];
+    }];
+        
+    XLYMapping *mapping = [XLYObjectMapping mappingForClass:[NSDictionary class]];
+    [mapping addRelationShipMapping:dogMapping fromKeyPath:@"dogs" toKey:@"dogs"];
+    [mapping addRelationShipMapping:catMapping fromKeyPath:@"cats" toKey:@"cats"];
+     
+    //perform transform
+    NSDictionary *result = [mapping performSyncMappingWithJSONObject:JSONObject error:&error];
+    //you will get a dictionary which has two keys of "dogs" and "cats". see test codes for more detail. 
+```
+
+#NSManagedObject mapping
+
+###managed object 'TestPerson' and 'TestCar' definition
+
+```objective-c
+
+    //definition of TestPerson class
+    @interface TestPerson : NSManagedObject
+    
+    @property (nonatomic, assign) int32_t identity;
+    @property (nonatomic, copy) NSString *name;
+    @property (nonatomic, assign) int32_t age;
+    @property (nonatomic, strong) NSSet *cars;
+    
+    @end
+
+    //definition of TestCar class
+    @interface TestCar : NSManagedObject
+    
+    @property (nonatomic, copy) NSString *vendor;
+    @property (nonatomic, assign) int64_t identity;
+    @property (nonatomic, strong) TestPerson *person;
+    
+    @end
+```
+
+###Persons.json
+    [
+      {
+        "name":"kaizei",
+        "age":26,
+        "id":1,
+        "cars":[
+          {
+            "vendor":"lamborghini",
+            "id":1001
+          },
+          {
+            "vendor":"porsche",
+            "id":1002
+          }
         ]
-    }
+      },
+      {
+        "name":"yimi",
+        "age":25,
+        "id":2,
+        "cars":[
+          {
+            "vendor":"cadillac",
+            "id":1003
+          },
+          {
+            "vendor":"mercedes-benz",
+            "id":1004
+          }
+        ]
+      }
+    ]
 
-###setup normal object mapping
-```objective-c
-    //setup people mapping.
-    //name -> name, more.id -> identity.
-    XLYObjectMapping *peopleMapping = [XLYObjectMapping mappingForClass:People.class];
-    peopleMapping.willMapBlock = (id)^(id JSONObject) {
-        //you can adjust the JSON here for any reason.
-        //you can cancel this mapping by return nil.
-        JSONObject = [JSONObject mutableCopy];
-        JSONObject[@"name"] = JSONObject[@"people_name"];
-        [JSONObject removeObjectForKey:@"people_name"];
-        return JSONObject;
-    };
-    [peopleMapping addAttributeMappingFromArray:@[@"name"]];
-    [peopleMapping addAttributeMappingFromDict:@{@"more.id":@"identity"}];
-    //setup child mapping.
-    //name -> name, isMale -> isBoy.
-    XLYObjectMapping *childMapping = [XLYObjectMapping mappingForClass:Child.class];
-    [childMapping addAttributeMappingFromDict:@{@"child_name":@"name"}];
-    //custom transform sex to isMale.
-    [childMapping addMappingFromKeyPath:@"sex" toKey:@"isMale" construction:^id(id JSONObject) {
-        //you can also adjust any property. can also return nil.
-        if ([[JSONObject lowercaseString] isEqualToString:@"boy"]) {
-            return @YES;
-        }
-        return @NO;
-    }];
-    //add a relationship mapping from children to kids.
-    [peopleMapping addRelationShipMapping:childMapping
-                              fromKeyPath:@"children"
-                                    toKey:@"kids"];
-
-    //this example is tested on iPhone 5s iOS8.1.
-    //it takes about 0.73s to perform 10,000 times when 'enableAutoMap' is YES.
-    //it takes about 0.61s to perform 10,000 times when 'enableAutoMap' is NO.
-
-    People *people = [peopleMapping performSyncMappingWithJSONObject:dict error:&error];
-```
-
-#second example about managedObject mapping
-
-###managed object 'Person' and 'Music' defination
+###setup managed object mapping and transform
 
 ```objective-c
-    @interface Person : NSManagedObject
-    @property (nonatomic, retain) NSString * name;
-    @property (nonatomic, retain) NSSet *musics;
-    @end
-
-    @interface Music : NSManagedObject
-    @property (nonatomic, retain) NSString * name;
-    @property (nonatomic, retain) NSDate * createDate;
-    @property (nonatomic, retain) Person *person;
-    @end
-```
-
-###JSON example2
-    //this time the JSON is:
-    { "artist_name": "kaizei",
-      "musics":[
-        {"music_name": "youzi", "create_date": "2014-9-28"},
-        {"music_name": "huolongguo", "create_date": "2014-9-29"}]
-    }
-
-###setup managed object mapping
-
-```objective-c
-    //setup Person mapping. set the name to be the primary key. we can set more than one.
-    XLYManagedObjectMapping *personMapping = [XLYManagedObjectMapping mappingForClass:Person.class
+    
+    //create mappings.
+    XLYManagedObjectMapping *carMapping = [XLYManagedObjectMapping mappingForClass:TestCar.class
+                                                                        entityName:@"Car"
+                                                                       primaryKeys:@[@"identity"]
+                                                              managedObjectContext:self.context];
+    [carMapping addAttributeMappingFromDict:@{@"id":@"identity"}];
+    [carMapping addAttributeMappingFromArray:@[@"vendor"]];
+    
+    XLYManagedObjectMapping *personMapping = [XLYManagedObjectMapping mappingForClass:TestPerson.class
                                                                            entityName:@"Person"
-                                                                          primaryKeys:@[@"name"]
+                                                                          primaryKeys:@[@"identity"]
                                                                  managedObjectContext:self.context];
-    [personMapping addAttributeMappingFromDict:@{@"artist_name":@"name"}];
-    //setup Music mapping.
-    XLYManagedObjectMapping *musicMapping = [XLYManagedObjectMapping mappingForClass:Music.class
-                                                                          entityName:@"Music"
-                                                                         primaryKeys:@[@"name"]
-                                                                managedObjectContext:self.context];
-    [musicMapping addAttributeMappingFromDict:@{@"music_name":@"name"}];
-    //custom the date transform.
-    [musicMapping addMappingFromKeyPath:@"create_date" toKey:@"createDate" construction:^id(id JSONObject) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyy-MM-dd";
-        return [formatter dateFromString:JSONObject];
-    }];
-    //add relationship
-    [personMapping addRelationShipMapping:musicMapping fromKeyPath:@"musics" toKey:@"musics"];
-    //perform mapping async.
-    [personMapping performAsyncMappingWithJSONObject:dict completion:^(id result, NSError *error) {
-        //do anything your want.
-        //NOTICE:no matter you perform mapping async or sync, it's always back to the context queue you give to the mapping.
-    }];
+    [personMapping addAttributeMappingFromDict:@{@"id":@"identity"}];
+    [personMapping addAttributeMappingFromArray:@[@"name", @"age"]];
+    
+    [personMapping addRelationShipMapping:carMapping fromKeyPath:@"cars" toKey:@"cars"];
+    
+    //transform json
+    NSArray *result = [self.mapping performSyncMappingWithJSONObject:self.JSONObject error:&error];
+    //you will get an array of two persons which are ManagedObject in 'self.context'.
 ```
 
 
@@ -168,10 +214,19 @@ the way to set default value is simple:
 **NOTICE**: the key in dictionary is the **toKey**.
 
 
+add relationship mapping for different kind of mappings
+======
+you can also add an managedObjectMapping as a relationship mapping of a normal NSObject mapping.
+see `testManagedObjectMapping_embedded` test method for more detail.
+
+you must notice that, not all different kind of mappings can be added as relationship mapping. it depends on concrete implementation.
+for example, you can only add managedObjectMapping as relationship for a managedObjectMapping. 
+
 support for swift
 ======
 
 if you want to use this mapping system in swift. you must:
+
 1. make your class inherit from NSObject, and support calling 'init()' method.
 2. make every property Non-Optional and give every property a default value.
 

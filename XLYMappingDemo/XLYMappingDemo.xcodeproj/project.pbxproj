@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC1F009B333F410ADC7B9C7F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BC1F01B4B2C04B7551F05656 /* README.md */; };
 		BC1F0110285275F436253FC9 /* TestCat.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F06D7B00FB0663249A32C /* TestCat.m */; };
+		BC1F01AC2EB0D9A172C01A07 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = BC1F0B62F17E8C1A26E74195 /* LICENSE */; };
 		BC1F01C0028E9A080A4540F6 /* XLYNormalObjectMappingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F0B039637A80DFC1B7D9A /* XLYNormalObjectMappingTest.m */; };
 		BC1F02309C812B5A7B716527 /* Animals.json in Resources */ = {isa = PBXBuildFile; fileRef = BC1F076BF5046C92A8306803 /* Animals.json */; };
 		BC1F035BE87C13536AEB4C4E /* XLYManagedObjectMappingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1F02E9DDFC0A65B9958B8F /* XLYManagedObjectMappingTest.m */; };
@@ -54,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		BC1F0170FE16FE1564796610 /* TestCat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCat.h; sourceTree = "<group>"; };
+		BC1F01B4B2C04B7551F05656 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = file.md; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		BC1F020691D9F15ADBA3728F /* Persons2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.json; path = Persons2.json; sourceTree = "<group>"; };
 		BC1F02E9DDFC0A65B9958B8F /* XLYManagedObjectMappingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYManagedObjectMappingTest.m; sourceTree = "<group>"; };
 		BC1F04C5692E44BA85F5A9CB /* TestAnimal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAnimal.h; sourceTree = "<group>"; };
@@ -61,6 +64,7 @@
 		BC1F076BF5046C92A8306803 /* Animals.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = Animals.json; sourceTree = "<group>"; };
 		BC1F087567A3CA5742596DFE /* TestPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestPerson.h; sourceTree = "<group>"; };
 		BC1F0B039637A80DFC1B7D9A /* XLYNormalObjectMappingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLYNormalObjectMappingTest.m; sourceTree = "<group>"; };
+		BC1F0B62F17E8C1A26E74195 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		BC1F0C9942184AEC5C01896B /* TestAnimal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAnimal.m; sourceTree = "<group>"; };
 		BC1F0D0F34D4F06FC98FB717 /* TestDog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestDog.h; sourceTree = "<group>"; };
 		BC1F0E9CE60E7A77DB3142E8 /* TestDog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestDog.m; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 				F6384AE11A0725E70023A97D /* XLYObjectMapping.m */,
 				F6B3CBE71A70A99A00150015 /* XLYManagedObjectMapping.h */,
 				F6B3CBE81A70A99A00150015 /* XLYManagedObjectMapping.m */,
+				BC1F0B62F17E8C1A26E74195 /* LICENSE */,
+				BC1F01B4B2C04B7551F05656 /* README.md */,
 			);
 			name = codes;
 			path = ../../codes;
@@ -360,6 +366,8 @@
 				F6384ACA1A0725780023A97D /* LaunchScreen.xib in Resources */,
 				F6356ACC1A07D28600BA6956 /* People.json in Resources */,
 				F6384AC71A0725780023A97D /* Images.xcassets in Resources */,
+				BC1F01AC2EB0D9A172C01A07 /* LICENSE in Resources */,
+				BC1F009B333F410ADC7B9C7F /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

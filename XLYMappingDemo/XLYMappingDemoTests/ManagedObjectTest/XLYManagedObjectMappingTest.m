@@ -39,7 +39,7 @@
     [context setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
     self.context = context;
     //mapping
-    XLYManagedObjectMapping *carMapping = [XLYManagedObjectMapping mappingForClass:TestCar .class
+    XLYManagedObjectMapping *carMapping = [XLYManagedObjectMapping mappingForClass:TestCar.class
                                                                         entityName:@"Car"
                                                                        primaryKeys:@[@"identity"]
                                                               managedObjectContext:self.context];
